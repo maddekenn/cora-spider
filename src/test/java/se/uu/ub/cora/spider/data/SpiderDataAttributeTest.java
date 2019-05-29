@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,15 +19,17 @@
 
 package se.uu.ub.cora.spider.data;
 
-import org.testng.annotations.Test;
-import se.uu.ub.cora.bookkeeper.data.DataAttribute;
-
 import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.data.DataAttribute;
 
 public class SpiderDataAttributeTest {
 	@Test
 	public void testInit() {
-		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute.withNameInDataAndValue("nameInData", "value");
+		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute
+				.withNameInDataAndValue("nameInData", "value");
 		assertEquals(spiderDataAttribute.getNameInData(), "nameInData");
 		assertEquals(spiderDataAttribute.getValue(), "value");
 	}
@@ -35,14 +37,16 @@ public class SpiderDataAttributeTest {
 	@Test
 	public void testFromDataAttribute() {
 		DataAttribute dataAttribute = DataAttribute.withNameInDataAndValue("nameInData", "value");
-		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute.fromDataAttribute(dataAttribute);
+		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute
+				.fromDataAttribute(dataAttribute);
 		assertEquals(spiderDataAttribute.getNameInData(), "nameInData");
 		assertEquals(spiderDataAttribute.getValue(), "value");
 	}
 
 	@Test
 	public void testToDataAttribute() {
-		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute.withNameInDataAndValue("nameInData", "value");
+		SpiderDataAttribute spiderDataAttribute = SpiderDataAttribute
+				.withNameInDataAndValue("nameInData", "value");
 		DataAttribute dataAttribute = spiderDataAttribute.toDataAttribute();
 		assertEquals(dataAttribute.getNameInData(), "nameInData");
 		assertEquals(dataAttribute.getValue(), "value");

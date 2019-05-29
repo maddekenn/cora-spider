@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,15 +19,16 @@
 
 package se.uu.ub.cora.spider.consistency;
 
-import se.uu.ub.cora.bookkeeper.data.DataAtomic;
-import se.uu.ub.cora.bookkeeper.data.DataElement;
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataElement;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.record.DataException;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
-public class MetadataConsistencyGroupAndCollectionValidatorImp implements MetadataConsistencyValidator {
+public class MetadataConsistencyGroupAndCollectionValidatorImp
+		implements MetadataConsistencyValidator {
 	private static final String LINKED_RECORD_ID = "linkedRecordId";
 	private static final String REF_PARENT_ID = "refParentId";
 	private RecordStorage recordStorage;
@@ -92,7 +93,8 @@ public class MetadataConsistencyGroupAndCollectionValidatorImp implements Metada
 		} catch (RecordNotFoundException exception) {
 			throw new DataException("Data is not valid: referenced child:  does not exist");
 		}
-		DataAtomic nameInData = (DataAtomic) childDataGroup.getFirstChildWithNameInData("nameInData");
+		DataAtomic nameInData = (DataAtomic) childDataGroup
+				.getFirstChildWithNameInData("nameInData");
 		return nameInData.getValue();
 	}
 
@@ -134,8 +136,8 @@ public class MetadataConsistencyGroupAndCollectionValidatorImp implements Metada
 		for (DataElement itemReference : references.getChildren()) {
 			String childItemId = extractRefItemIdFromRefItemGroup(itemReference);
 			if (!ensureChildItemExistsInParent(childItemId, parentReferences)) {
-				throw new DataException(
-						"Data is not valid: childItem: " + childItemId + " does not exist in parent");
+				throw new DataException("Data is not valid: childItem: " + childItemId
+						+ " does not exist in parent");
 			}
 		}
 	}
@@ -149,7 +151,8 @@ public class MetadataConsistencyGroupAndCollectionValidatorImp implements Metada
 
 	private DataGroup extractParentItemReferences() {
 		String refParentId = extractParentId();
-		DataGroup parentCollectionVar = recordStorage.read("metadataCollectionVariable", refParentId);
+		DataGroup parentCollectionVar = recordStorage.read("metadataCollectionVariable",
+				refParentId);
 		DataGroup parentRefCollection = (DataGroup) parentCollectionVar
 				.getFirstChildWithNameInData("refCollection");
 		String parentRefCollectionId = parentRefCollection
@@ -186,7 +189,8 @@ public class MetadataConsistencyGroupAndCollectionValidatorImp implements Metada
 		if (hasFinalValue()) {
 			String finalValue = recordAsDataGroup.getFirstAtomicValueWithNameInData("finalValue");
 			if (!validateFinalValue(finalValue)) {
-				throw new DataException("Data is not valid: final value does not exist in collection");
+				throw new DataException(
+						"Data is not valid: final value does not exist in collection");
 			}
 		}
 	}

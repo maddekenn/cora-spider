@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -30,7 +30,7 @@ import java.util.Set;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
 import se.uu.ub.cora.spider.data.SpiderDataGroup;
@@ -64,8 +64,7 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 	private void setUpDependencyProvider() {
 		extendedFunctionality = WorkOrderExecutorAsExtendedFunctionality
 				.usingDependencyProvider(dependencyProvider);
-		termCollector = (DataGroupTermCollectorSpy) dependencyProvider
-				.getDataGroupTermCollector();
+		termCollector = (DataGroupTermCollectorSpy) dependencyProvider.getDataGroupTermCollector();
 		recordIndexer = (RecordIndexerSpy) dependencyProvider.getRecordIndexer();
 		authorizer = (AlwaysAuthorisedExceptStub) dependencyProvider.getSpiderAuthorizator();
 		authenticator = (AuthenticatorSpy) dependencyProvider.getAuthenticator();
@@ -73,7 +72,9 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 
 	@Test
 	public void testIndexData() {
-		SpiderDataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book", "book1");
+		SpiderDataGroup workOrder = DataCreator
+				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book",
+						"book1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		assertTrue(termCollector.collectTermsWasCalled);
@@ -96,7 +97,9 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 	public void testIndexDataForChildOfAbstract() {
 		dependencyProvider.recordStorage = new RecordStorageCreateUpdateSpy();
 		setUpDependencyProvider();
-		SpiderDataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "image", "image1");
+		SpiderDataGroup workOrder = DataCreator
+				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "image",
+						"image1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		List<String> ids = recordIndexer.ids;
@@ -115,7 +118,9 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 		actions.add("index");
 		authorizer.notAuthorizedForRecordTypeAndActions.put("book", actions);
 
-		SpiderDataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book", "book1");
+		SpiderDataGroup workOrder = DataCreator
+				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book",
+						"book1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		assertFalse(termCollector.collectTermsWasCalled);

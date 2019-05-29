@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,10 +19,11 @@
 
 package se.uu.ub.cora.spider.data;
 
-import org.testng.annotations.Test;
-import se.uu.ub.cora.bookkeeper.data.DataAtomic;
-
 import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.data.DataAtomic;
 
 public class SpiderDataAtomicTest {
 	@Test

@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.data.Action;
 import se.uu.ub.cora.spider.data.SpiderDataElement;
@@ -240,8 +240,7 @@ public class DataGroupToRecordEnhancerImp implements DataGroupToRecordEnhancer {
 		String searchId = searchChildInRecordType
 				.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 		DataGroup searchGroup = recordStorage.read(SEARCH, searchId);
-		return searchGroup
-				.getAllGroupsWithNameInData("recordTypeToSearchIn");
+		return searchGroup.getAllGroupsWithNameInData("recordTypeToSearchIn");
 	}
 
 	private void possiblyAddSearchActionWhenRecordTypeSearch(SpiderDataRecord spiderDataRecord) {

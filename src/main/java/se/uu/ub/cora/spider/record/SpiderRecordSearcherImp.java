@@ -84,7 +84,10 @@ public final class SpiderRecordSearcherImp implements SpiderRecordSearcher {
 	}
 
 	private void storeStartRowValueOrSetDefault() {
-		String start = searchData.getFirstAtomicValueWithNameInDataOrDefault("start", "1");
+		String start = "1";
+		if (searchData.containsChildWithNameInData("start")) {
+			start = searchData.getFirstAtomicValueWithNameInData("start");
+		}
 		startRow = Integer.parseInt(start);
 	}
 

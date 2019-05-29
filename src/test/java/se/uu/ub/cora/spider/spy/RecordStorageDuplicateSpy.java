@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.SpiderReadResult;
 import se.uu.ub.cora.spider.record.storage.RecordConflictException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -34,8 +34,9 @@ public class RecordStorageDuplicateSpy implements RecordStorage {
 	@Override
 	public DataGroup read(String type, String id) {
 		if (type.equals("recordType")) {
-			DataGroup group = DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead(id,
-					"true", "false", "false");
+			DataGroup group = DataCreator
+					.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead(id, "true",
+							"false", "false");
 			return group;
 		}
 		return null;

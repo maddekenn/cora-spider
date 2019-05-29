@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Uppsala University Library
+ * Copyright 2015, 2016, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -32,10 +32,10 @@ import java.util.HashSet;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;

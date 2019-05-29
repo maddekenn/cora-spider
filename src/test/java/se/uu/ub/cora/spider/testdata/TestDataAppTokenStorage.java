@@ -19,8 +19,8 @@
 
 package se.uu.ub.cora.spider.testdata;
 
-import se.uu.ub.cora.bookkeeper.data.DataAtomic;
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.record.storage.RecordStorageInMemoryStub;
 
 public class TestDataAppTokenStorage {
@@ -37,12 +37,12 @@ public class TestDataAppTokenStorage {
 		addRecordTypeImage(recordsInMemory);
 
 		DataGroup dummyUser1 = DataGroup.withNameInData("user");
-		recordsInMemory.create("systemOneUser", "dummy1", dummyUser1,
-				null, DataGroup.withNameInData("collectedLinksList"), "systemOne");
+		recordsInMemory.create("systemOneUser", "dummy1", dummyUser1, null,
+				DataGroup.withNameInData("collectedLinksList"), "systemOne");
 
 		DataGroup dummyUser2 = DataGroup.withNameInData("user");
-		recordsInMemory.create("systemTwoUser", "dummy2", dummyUser2,
-				null, DataGroup.withNameInData("collectedLinksList"), "systemOne");
+		recordsInMemory.create("systemTwoUser", "dummy2", dummyUser2, null,
+				DataGroup.withNameInData("collectedLinksList"), "systemOne");
 
 		// DataGroup dummyUser2 = DataGroup.withNameInData("user");
 		// String inactiveUserJson =
@@ -73,64 +73,67 @@ public class TestDataAppTokenStorage {
 		dataGroup.addChild(recordInfo);
 
 		dataGroup.addChild(DataAtomic.withNameInDataAndValue("abstract", "false"));
-		recordsInMemory.create(recordType, "metadata", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		recordsInMemory.create(recordType, "metadata", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeRecordType(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator
-				.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("recordType", "true", "false", "false");
-		recordsInMemory.create(recordType, "recordType", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+				.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("recordType",
+						"true", "false", "false");
+		recordsInMemory.create(recordType, "recordType", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeImage(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator
 				.createRecordTypeWithIdAndUserSuppliedIdAndParentId("image", "true", "binary");
-		recordsInMemory.create(recordType, "image", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		recordsInMemory.create(recordType, "image", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeUser(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
-		DataGroup dataGroup = DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("user",
-				"true", "true", "false");
-		recordsInMemory.create(recordType, "user", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		DataGroup dataGroup = DataCreator
+				.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("user", "true",
+						"true", "false");
+		recordsInMemory.create(recordType, "user", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeSystemOneUser(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndParentId(
 				"systemOneUser", "true", "user");
-		recordsInMemory.create(recordType, "systemOneUser", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		recordsInMemory.create(recordType, "systemOneUser", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeSystemTwoUser(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndParentId(
 				"systemTwoUser", "true", "user");
-		recordsInMemory.create(recordType, "systemTwoUser", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		recordsInMemory.create(recordType, "systemTwoUser", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeWithParent(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndParentId(
 				"systemTwoUser", "true", "user");
-		recordsInMemory.create(recordType, "recordTypeWithParent", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+		recordsInMemory.create(recordType, "recordTypeWithParent", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 	}
 
 	private static void addRecordTypeAppToken(RecordStorageInMemoryStub recordsInMemory) {
 		String recordType = "recordType";
 		DataGroup dataGroup = DataCreator
-				.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("appToken", "false", "false", "false");
-		recordsInMemory.create(recordType, "appToken", dataGroup,
-				null, DataGroup.withNameInData("collectedLinksList"), "cora");
+				.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead("appToken",
+						"false", "false", "false");
+		recordsInMemory.create(recordType, "appToken", dataGroup, null,
+				DataGroup.withNameInData("collectedLinksList"), "cora");
 
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016 , 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.uu.ub.cora.beefeater.authentication.User;
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.Action;
 import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.data.SpiderDataRecord;

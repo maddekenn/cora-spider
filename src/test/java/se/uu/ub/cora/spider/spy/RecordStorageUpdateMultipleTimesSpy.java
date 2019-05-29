@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import se.uu.ub.cora.bookkeeper.data.DataAtomic;
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.SpiderReadResult;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -51,8 +51,8 @@ public class RecordStorageUpdateMultipleTimesSpy implements RecordStorage {
 		this.id = id;
 		readWasCalled = true;
 		if ("spyType".equals(id)) {
-			return DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead(id, "false",
-					"false", "false");
+			return DataCreator.createRecordTypeWithIdAndUserSuppliedIdAndAbstractAndPublicRead(id,
+					"false", "false", "false");
 		}
 		if (recordToReturnOnRead != null) {
 			return recordToReturnOnRead;

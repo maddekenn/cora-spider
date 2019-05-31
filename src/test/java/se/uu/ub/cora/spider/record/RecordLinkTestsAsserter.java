@@ -27,81 +27,79 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import se.uu.ub.cora.spider.data.Action;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataRecord;
-import se.uu.ub.cora.spider.data.SpiderDataRecordLink;
-import se.uu.ub.cora.spider.data.SpiderDataResourceLink;
+import se.uu.ub.cora.data.Action;
+import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecord;
+import se.uu.ub.cora.data.DataRecordLink;
+import se.uu.ub.cora.data.DataResourceLink;
 
 public class RecordLinkTestsAsserter {
-	public static void assertTopLevelLinkContainsReadActionOnly(SpiderDataRecord record) {
-		SpiderDataRecordLink link = getLinkFromRecord(record);
+	public static void assertTopLevelLinkContainsReadActionOnly(DataRecord record) {
+		DataRecordLink link = getLinkFromRecord(record);
 		assertTrue(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 1);
 	}
 
-	private static SpiderDataRecordLink getLinkFromRecord(SpiderDataRecord record) {
-		SpiderDataGroup spiderDataGroup = record.getSpiderDataGroup();
-		SpiderDataRecordLink link = (SpiderDataRecordLink) spiderDataGroup
-				.getFirstChildWithNameInData("link");
+	private static DataRecordLink getLinkFromRecord(DataRecord record) {
+		DataGroup spiderDataGroup = record.getDataGroup();
+		DataRecordLink link = (DataRecordLink) spiderDataGroup.getFirstChildWithNameInData("link");
 		return link;
 	}
 
-	public static void assertTopLevelTwoLinksContainReadActionOnly(SpiderDataRecord record) {
-		List<SpiderDataRecordLink> links = getLinksFromRecord(record);
-		for (SpiderDataRecordLink link : links) {
+	public static void assertTopLevelTwoLinksContainReadActionOnly(DataRecord record) {
+		List<DataRecordLink> links = getLinksFromRecord(record);
+		for (DataRecordLink link : links) {
 			assertTrue(link.getActions().contains(Action.READ));
 			assertEquals(link.getActions().size(), 1);
 		}
 		assertEquals(links.size(), 2);
 	}
 
-	private static List<SpiderDataRecordLink> getLinksFromRecord(SpiderDataRecord record) {
-		SpiderDataGroup spiderDataGroup = record.getSpiderDataGroup();
-		List<SpiderDataGroup> links = spiderDataGroup.getAllGroupsWithNameInData("link");
-		List<SpiderDataRecordLink> links2 = new ArrayList<SpiderDataRecordLink>();
-		for (SpiderDataGroup spiderDataGroup2 : links) {
-			links2.add((SpiderDataRecordLink) spiderDataGroup2);
+	private static List<DataRecordLink> getLinksFromRecord(DataRecord record) {
+		DataGroup spiderDataGroup = record.getDataGroup();
+		List<DataGroup> links = spiderDataGroup.getAllGroupsWithNameInData("link");
+		List<DataRecordLink> links2 = new ArrayList<DataRecordLink>();
+		for (DataGroup spiderDataGroup2 : links) {
+			links2.add((DataRecordLink) spiderDataGroup2);
 		}
 		return links2;
 	}
 
-	public static void assertOneLevelDownLinkContainsReadActionOnly(SpiderDataRecord record) {
-		SpiderDataGroup spiderDataGroup = record.getSpiderDataGroup();
-		SpiderDataGroup spiderDataGroupOneLevelDown = (SpiderDataGroup) spiderDataGroup
+	public static void assertOneLevelDownLinkContainsReadActionOnly(DataRecord record) {
+		DataGroup spiderDataGroup = record.getDataGroup();
+		DataGroup spiderDataGroupOneLevelDown = (DataGroup) spiderDataGroup
 				.getFirstChildWithNameInData("oneLevelDown");
-		SpiderDataRecordLink link = (SpiderDataRecordLink) spiderDataGroupOneLevelDown
+		DataRecordLink link = (DataRecordLink) spiderDataGroupOneLevelDown
 				.getFirstChildWithNameInData("link");
 		assertTrue(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 1);
 	}
 
-	public static void assertTopLevelResourceLinkContainsReadActionOnly(SpiderDataRecord record) {
-		SpiderDataResourceLink link = getResourceLinkFromRecord(record);
+	public static void assertTopLevelResourceLinkContainsReadActionOnly(DataRecord record) {
+		DataResourceLink link = getResourceLinkFromRecord(record);
 		assertTrue(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 1);
 	}
 
-	private static SpiderDataResourceLink getResourceLinkFromRecord(SpiderDataRecord record) {
-		SpiderDataGroup spiderDataGroup = record.getSpiderDataGroup();
-		SpiderDataResourceLink link = (SpiderDataResourceLink) spiderDataGroup
+	private static DataResourceLink getResourceLinkFromRecord(DataRecord record) {
+		DataGroup spiderDataGroup = record.getDataGroup();
+		DataResourceLink link = (DataResourceLink) spiderDataGroup
 				.getFirstChildWithNameInData("link");
 		return link;
 	}
 
-	public static void assertOneLevelDownResourceLinkContainsReadActionOnly(
-			SpiderDataRecord record) {
-		SpiderDataGroup spiderDataGroup = record.getSpiderDataGroup();
-		SpiderDataGroup spiderDataGroupOneLevelDown = (SpiderDataGroup) spiderDataGroup
+	public static void assertOneLevelDownResourceLinkContainsReadActionOnly(DataRecord record) {
+		DataGroup spiderDataGroup = record.getDataGroup();
+		DataGroup spiderDataGroupOneLevelDown = (DataGroup) spiderDataGroup
 				.getFirstChildWithNameInData("oneLevelDown");
-		SpiderDataResourceLink link = (SpiderDataResourceLink) spiderDataGroupOneLevelDown
+		DataResourceLink link = (DataResourceLink) spiderDataGroupOneLevelDown
 				.getFirstChildWithNameInData("link");
 		assertTrue(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 1);
 	}
 
-	public static void assertTopLevelLinkDoesNotContainReadAction(SpiderDataRecord record) {
-		SpiderDataRecordLink link = getLinkFromRecord(record);
+	public static void assertTopLevelLinkDoesNotContainReadAction(DataRecord record) {
+		DataRecordLink link = getLinkFromRecord(record);
 		assertFalse(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 0);
 	}

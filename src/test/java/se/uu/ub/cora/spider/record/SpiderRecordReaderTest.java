@@ -39,7 +39,6 @@ import se.uu.ub.cora.spider.authorization.AuthorizationException;
 import se.uu.ub.cora.spider.authorization.NeverAuthorisedStub;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.data.SpiderDataRecord;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
@@ -103,7 +102,7 @@ public class SpiderRecordReaderTest {
 	public void testReadAuthorized() {
 		SpiderDataRecord record = recordReader.readRecord("someToken78678567", "place",
 				"place:0001");
-		SpiderDataGroup groupOut = record.getSpiderDataGroup();
+		DataGroup groupOut = record.getDataGroup();
 		assertEquals(groupOut.getNameInData(), "authority",
 				"recordOut.getNameInData should be authority");
 	}
@@ -112,7 +111,7 @@ public class SpiderRecordReaderTest {
 	public void testReadAuthorized2() {
 		SpiderDataRecord record = recordReader.readRecord("someToken78678567", "place",
 				"place:0001");
-		SpiderDataGroup groupOut = record.getSpiderDataGroup();
+		DataGroup groupOut = record.getDataGroup();
 		assertEquals(groupOut.getNameInData(), "authority");
 
 		AuthorizatorAlwaysAuthorizedSpy authorizatorSpy = ((AuthorizatorAlwaysAuthorizedSpy) authorizator);

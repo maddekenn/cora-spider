@@ -223,7 +223,7 @@ public class SpiderUploaderTest {
 	}
 
 	private void assertStreamStorageCalledCorrectly(SpiderDataRecord recordUpdated) {
-		SpiderDataGroup groupUpdated = recordUpdated.getSpiderDataGroup();
+		SpiderDataGroup groupUpdated = recordUpdated.getDataGroup();
 		SpiderDataGroup recordInfo = groupUpdated.extractGroup("recordInfo");
 		SpiderDataGroup dataDivider = recordInfo.extractGroup("dataDivider");
 
@@ -241,7 +241,7 @@ public class SpiderUploaderTest {
 	}
 
 	private void assertResourceInfoIsCorrect(SpiderDataRecord recordUpdated) {
-		SpiderDataGroup groupUpdated = recordUpdated.getSpiderDataGroup();
+		SpiderDataGroup groupUpdated = recordUpdated.getDataGroup();
 
 		SpiderDataGroup resourceInfo = groupUpdated.extractGroup("resourceInfo");
 		SpiderDataGroup master = resourceInfo.extractGroup("master");

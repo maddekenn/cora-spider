@@ -204,7 +204,7 @@ public class SpiderRecordValidatorTest {
 				"new", "true");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "text", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "true");
 
 		DataValidatorAlwaysValidSpy dataValidatorSpy = (DataValidatorAlwaysValidSpy) dataValidator;
@@ -236,7 +236,7 @@ public class SpiderRecordValidatorTest {
 				"existing", "true");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "validationOrder", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "true");
 
 		DataValidatorAlwaysValidSpy dataValidatorSpy = (DataValidatorAlwaysValidSpy) dataValidator;
@@ -254,7 +254,7 @@ public class SpiderRecordValidatorTest {
 				"existing", "true");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "validationOrder", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "true");
 
 		IdGeneratorSpy generatorSpy = (IdGeneratorSpy) idGenerator;
@@ -294,7 +294,7 @@ public class SpiderRecordValidatorTest {
 				"existing", "true");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "validationOrder", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "false");
 
 		assertEquals(((DataValidatorValidExceptSpy) dataValidator).numOfCallsToValidate, 2);
@@ -314,7 +314,7 @@ public class SpiderRecordValidatorTest {
 				"new", "true");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "text", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "false");
 
 		SpiderDataGroup errorMessages = validationResult.extractGroup("errorMessages");
@@ -342,7 +342,7 @@ public class SpiderRecordValidatorTest {
 
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "validationOrder", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "false");
 
 		SpiderDataGroup errorMessages = validationResult.extractGroup("errorMessages");
@@ -372,7 +372,7 @@ public class SpiderRecordValidatorTest {
 				"new", "false");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "text", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "true");
 
 	}
@@ -475,7 +475,7 @@ public class SpiderRecordValidatorTest {
 		changeRecordTypeTo(validationOrder, "recordType_NOT_EXISTING");
 		SpiderDataRecord validationResultRecord = recordValidator
 				.validateRecord("someToken78678567", "validationOrder", validationOrder, dataGroup);
-		SpiderDataGroup validationResult = validationResultRecord.getSpiderDataGroup();
+		SpiderDataGroup validationResult = validationResultRecord.getDataGroup();
 		assertEquals(validationResult.extractAtomicValue("valid"), "false");
 
 		SpiderDataGroup errorMessages = validationResult.extractGroup("errorMessages");

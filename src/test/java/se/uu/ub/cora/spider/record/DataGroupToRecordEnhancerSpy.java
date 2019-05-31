@@ -23,10 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.data.Action;
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.Action;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataRecord;
+import se.uu.ub.cora.data.DataRecord;
 
 public class DataGroupToRecordEnhancerSpy implements DataGroupToRecordEnhancer {
 
@@ -37,14 +36,13 @@ public class DataGroupToRecordEnhancerSpy implements DataGroupToRecordEnhancer {
 	public boolean addReadAction = true;
 
 	@Override
-	public SpiderDataRecord enhance(User user, String recordType, DataGroup dataGroup) {
+	public DataRecord enhance(User user, String recordType, DataGroup dataGroup) {
 		enhancedDataGroups.add(dataGroup);
 		this.user = user;
 		this.recordType = recordType;
 		this.dataGroup = dataGroup;
 
-		SpiderDataRecord spiderDataGroup = SpiderDataRecord
-				.withDataGroup(SpiderDataGroup.fromDataGroup(dataGroup));
+		DataRecord spiderDataGroup = DataRecord.withDataGroup(dataGroup);
 		if (addReadAction) {
 			spiderDataGroup.addAction(Action.READ);
 		}

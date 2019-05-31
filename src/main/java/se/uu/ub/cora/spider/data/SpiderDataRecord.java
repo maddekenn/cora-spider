@@ -24,21 +24,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import se.uu.ub.cora.data.Action;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecord;
 
 public final class SpiderDataRecord implements SpiderData {
 	private Set<String> keys = new HashSet<>();
-	private SpiderDataGroup spiderDataGroup;
+	// private SpiderDataGroup spiderDataGroup;
 	private DataGroup dataGroup;
 	private List<Action> actions = new ArrayList<>();
 
-	public static SpiderDataRecord withDataGroup(SpiderDataGroup spiderDataGroup) {
-		return new SpiderDataRecord(spiderDataGroup);
+	public static SpiderDataRecord withDataGroup(DataGroup dataGroup) {
+		return new SpiderDataRecord(dataGroup);
 	}
 
-	private SpiderDataRecord(SpiderDataGroup spiderDataGroup) {
-		this.spiderDataGroup = spiderDataGroup;
+	private SpiderDataRecord(DataGroup dataGroup) {
+		this.dataGroup = dataGroup;
 	}
 
 	public static SpiderDataRecord fromDataRecord(DataRecord dataRecord) {
@@ -47,7 +48,7 @@ public final class SpiderDataRecord implements SpiderData {
 
 	private SpiderDataRecord(DataRecord dataRecord) {
 		keys.addAll(dataRecord.getKeys());
-		spiderDataGroup = SpiderDataGroup.fromDataGroup(dataRecord.getDataGroup());
+		dataGroup = dataRecord.getDataGroup();
 	}
 
 	public void addKey(String key) {
@@ -61,14 +62,14 @@ public final class SpiderDataRecord implements SpiderData {
 	public Set<String> getKeys() {
 		return keys;
 	}
+	//
+	// public void setSpiderDataGroup(SpiderDataGroup spiderDataGroup) {
+	// this.spiderDataGroup = spiderDataGroup;
+	//
+	// }
 
-	public void setSpiderDataGroup(SpiderDataGroup spiderDataGroup) {
-		this.spiderDataGroup = spiderDataGroup;
-
-	}
-
-	public SpiderDataGroup getSpiderDataGroup() {
-		return spiderDataGroup;
+	public DataGroup getDataGroup() {
+		return dataGroup;
 	}
 
 	public void addAction(Action action) {
@@ -80,7 +81,7 @@ public final class SpiderDataRecord implements SpiderData {
 	}
 
 	public DataRecord toDataRecord() {
-		DataGroup dataGroup = spiderDataGroup.toDataGroup();
+		// DataGroup dataGroup = spiderDataGroup.toDataGroup();
 		DataRecord dataRecord = DataRecord.withDataGroup(dataGroup);
 		dataRecord.getKeys().addAll(keys);
 		return dataRecord;

@@ -181,7 +181,7 @@ public class SpiderRecordUpdaterTest {
 
 	private void assertUpdatedRepeatIdsInGroupAsListed(SpiderDataRecord updatedRecord,
 			String... expectedRepeatIds) {
-		SpiderDataGroup updatedDataGroup = updatedRecord.getSpiderDataGroup();
+		SpiderDataGroup updatedDataGroup = updatedRecord.getDataGroup();
 		SpiderDataGroup updatedRecordInfo = updatedDataGroup.extractGroup("recordInfo");
 
 		List<SpiderDataGroup> updatedGroups = updatedRecordInfo
@@ -196,7 +196,7 @@ public class SpiderRecordUpdaterTest {
 	}
 
 	private void assertCorrectUserInfo(SpiderDataRecord updatedOnce) {
-		SpiderDataGroup updatedOnceDataGroup = updatedOnce.getSpiderDataGroup();
+		SpiderDataGroup updatedOnceDataGroup = updatedOnce.getDataGroup();
 		SpiderDataGroup updatedOnceRecordInfo = updatedOnceDataGroup.extractGroup("recordInfo");
 		assertCorrectDataUsingGroupNameInDataAndLinkedRecordId(updatedOnceRecordInfo, "createdBy",
 				"6789");
@@ -256,12 +256,12 @@ public class SpiderRecordUpdaterTest {
 		setUpdatedRecordInStorageSpyToReturnOnRead(updatedOnce);
 
 		SpiderDataRecord updatedTwice = recordUpdater.updateRecord("someToken78678567", "spyType",
-				"spyId", updatedOnce.getSpiderDataGroup());
+				"spyId", updatedOnce.getDataGroup());
 		assertUpdatedRepeatIdsInGroupAsListed(updatedTwice, "0", "1");
 
 		setUpdatedRecordInStorageSpyToReturnOnRead(updatedTwice);
 		SpiderDataRecord updatedThree = recordUpdater.updateRecord("someToken78678567", "spyType",
-				"spyId", updatedOnce.getSpiderDataGroup());
+				"spyId", updatedOnce.getDataGroup());
 		assertUpdatedRepeatIdsInGroupAsListed(updatedThree, "0", "1", "2");
 	}
 
@@ -277,7 +277,7 @@ public class SpiderRecordUpdaterTest {
 				"spyType", "spyId", spiderDataGroup);
 		assertCorrectUserInfo(updatedOnceRecord);
 
-		SpiderDataGroup updatedOnce = updatedOnceRecord.getSpiderDataGroup();
+		SpiderDataGroup updatedOnce = updatedOnceRecord.getDataGroup();
 		SpiderDataGroup recordInfo = updatedOnce.extractGroup("recordInfo");
 
 		SpiderDataGroup secondUpdated = SpiderDataGroup.withNameInData("updated");
@@ -293,7 +293,7 @@ public class SpiderRecordUpdaterTest {
 
 	private void setUpdatedRecordInStorageSpyToReturnOnRead(SpiderDataRecord updatedRecord) {
 		RecordStorageUpdateMultipleTimesSpy storageSpy = (RecordStorageUpdateMultipleTimesSpy) recordStorage;
-		storageSpy.recordToReturnOnRead = updatedRecord.getSpiderDataGroup().toDataGroup();
+		storageSpy.recordToReturnOnRead = updatedRecord.getDataGroup().toDataGroup();
 	}
 
 	@Test
@@ -314,7 +314,7 @@ public class SpiderRecordUpdaterTest {
 		changeUpdatedValue(firstUpdated);
 
 		SpiderDataRecord recordAlreadyContainingUpdateInfo = recordUpdater.updateRecord(
-				"someToken78678567", "spyType", "spyId", updatedRecord.getSpiderDataGroup());
+				"someToken78678567", "spyType", "spyId", updatedRecord.getDataGroup());
 
 		SpiderDataGroup updatedRecordInfo = getRecordInfo(recordAlreadyContainingUpdateInfo);
 		List<SpiderDataGroup> updatedGroups = updatedRecordInfo
@@ -328,12 +328,12 @@ public class SpiderRecordUpdaterTest {
 	}
 
 	private SpiderDataGroup getRecordInfo(SpiderDataRecord record) {
-		SpiderDataGroup updatedSpiderDataGroup = record.getSpiderDataGroup();
+		SpiderDataGroup updatedSpiderDataGroup = record.getDataGroup();
 		return updatedSpiderDataGroup.extractGroup("recordInfo");
 	}
 
 	private SpiderDataGroup getFirstUpdatedInfo(SpiderDataRecord updatedRecord) {
-		SpiderDataGroup updatedRecordInfo = updatedRecord.getSpiderDataGroup()
+		SpiderDataGroup updatedRecordInfo = updatedRecord.getDataGroup()
 				.extractGroup("recordInfo");
 		SpiderDataGroup firstUpdated = updatedRecordInfo.extractGroup("updated");
 		return firstUpdated;

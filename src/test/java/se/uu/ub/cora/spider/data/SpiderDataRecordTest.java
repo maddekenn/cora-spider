@@ -28,6 +28,7 @@ import java.util.Set;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.data.Action;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecord;
 
@@ -37,7 +38,8 @@ public class SpiderDataRecordTest {
 	@BeforeMethod
 	public void beforeMethod() {
 		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
-		spiderDataRecord = SpiderDataRecord.withDataGroup(spiderDataGroup);
+		DataGroup dataGroup = DataGroup.withNameInData("nameInData");
+		spiderDataRecord = SpiderDataRecord.withDataGroup(dataGroup);
 	}
 
 	@Test
@@ -72,16 +74,16 @@ public class SpiderDataRecordTest {
 
 	@Test
 	public void testGetSpiderDataGroup() {
-		String nameInData = spiderDataRecord.getSpiderDataGroup().getNameInData();
+		String nameInData = spiderDataRecord.getDataGroup().getNameInData();
 		assertEquals(nameInData, "nameInData");
 	}
 
-	@Test
-	public void testSpiderDataGroup() {
-		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
-		spiderDataRecord.setSpiderDataGroup(spiderDataGroup);
-		assertEquals(spiderDataRecord.getSpiderDataGroup(), spiderDataGroup);
-	}
+	// @Test
+	// public void testSpiderDataGroup() {
+	// SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
+	// spiderDataRecord.setSpiderDataGroup(spiderDataGroup);
+	// assertEquals(spiderDataRecord.getDataGroup(), spiderDataGroup);
+	// }
 
 	@Test
 	public void testFromDataRecord() {
@@ -95,7 +97,7 @@ public class SpiderDataRecordTest {
 		assertTrue(keys.contains("KEY1"));
 		assertTrue(keys.contains("KEY2"));
 
-		String nameInData = spiderDataRecord.getSpiderDataGroup().getNameInData();
+		String nameInData = spiderDataRecord.getDataGroup().getNameInData();
 		assertEquals(nameInData, "nameInData");
 	}
 

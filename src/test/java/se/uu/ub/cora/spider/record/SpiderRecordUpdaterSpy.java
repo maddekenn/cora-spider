@@ -37,7 +37,7 @@ public class SpiderRecordUpdaterSpy implements SpiderRecordUpdater {
 		this.id = id;
 		this.record = record;
 		// TODO Auto-generated method stub
-		return SpiderDataRecord.withSpiderDataGroup(record);
+		return SpiderDataRecord.withDataGroup(record);
 	}
 
 }

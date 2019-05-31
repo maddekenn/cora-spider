@@ -30,9 +30,10 @@ import se.uu.ub.cora.data.DataRecord;
 public final class SpiderDataRecord implements SpiderData {
 	private Set<String> keys = new HashSet<>();
 	private SpiderDataGroup spiderDataGroup;
+	private DataGroup dataGroup;
 	private List<Action> actions = new ArrayList<>();
 
-	public static SpiderDataRecord withSpiderDataGroup(SpiderDataGroup spiderDataGroup) {
+	public static SpiderDataRecord withDataGroup(SpiderDataGroup spiderDataGroup) {
 		return new SpiderDataRecord(spiderDataGroup);
 	}
 

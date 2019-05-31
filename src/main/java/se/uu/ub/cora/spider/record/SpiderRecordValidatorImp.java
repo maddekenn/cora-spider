@@ -110,7 +110,7 @@ public final class SpiderRecordValidatorImp extends SpiderRecordHandler
 
 		createValidationResultDataGroup();
 		validateRecordUsingValidationRecord(validationRecord, recordTypeToValidate);
-		SpiderDataRecord record = SpiderDataRecord.withSpiderDataGroup(validationResult);
+		SpiderDataRecord record = SpiderDataRecord.withDataGroup(validationResult);
 		addReadActionToComplyWithRecordStructure(record);
 		return record;
 	}

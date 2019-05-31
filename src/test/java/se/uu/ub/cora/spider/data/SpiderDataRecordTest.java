@@ -37,7 +37,7 @@ public class SpiderDataRecordTest {
 	@BeforeMethod
 	public void beforeMethod() {
 		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
-		spiderDataRecord = SpiderDataRecord.withSpiderDataGroup(spiderDataGroup);
+		spiderDataRecord = SpiderDataRecord.withDataGroup(spiderDataGroup);
 	}
 
 	@Test

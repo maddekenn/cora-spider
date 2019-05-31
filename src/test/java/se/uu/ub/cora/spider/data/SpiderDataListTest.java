@@ -37,7 +37,7 @@ public class SpiderDataListTest {
 	public void testAddRecord() {
 		SpiderDataList spiderDataList = SpiderDataList.withContainDataOfType("metadata");
 		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("spiderDataGroupId");
-		SpiderDataRecord record = SpiderDataRecord.withSpiderDataGroup(spiderDataGroup);
+		SpiderDataRecord record = SpiderDataRecord.withDataGroup(spiderDataGroup);
 		spiderDataList.addData(record);
 		List<SpiderData> records = spiderDataList.getDataList();
 		assertEquals(records.get(0), record);

@@ -132,7 +132,7 @@ public class RecordStorageSpy implements RecordStorage {
 
 		if ("image".equals(type) && "image:123456789".equals(id)) {
 			return DataCreator.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordId("image",
-					"image:123456789", "image", "cora").toDataGroup();
+					"image:123456789", "image", "cora");
 		}
 		if ("recordType".equals(type) && "book".equals(id)) {
 			DataGroup book = DataGroup.withNameInData("recordType");
@@ -150,8 +150,7 @@ public class RecordStorageSpy implements RecordStorage {
 		if ("book".equals(type) && "book1".equals(id)) {
 			DataGroup book = DataGroup.withNameInData("book");
 			DataGroup recordInfo = DataCreator
-					.createRecordInfoWithIdAndTypeAndLinkedRecordId("book1", "book", "testSystem")
-					.toDataGroup();
+					.createRecordInfoWithIdAndTypeAndLinkedRecordId("book1", "book", "testSystem");
 			book.addChild(recordInfo);
 			return book;
 

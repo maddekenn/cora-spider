@@ -22,10 +22,9 @@ package se.uu.ub.cora.spider.record;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataElement;
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 
 public class SpiderRecordHandler {
@@ -36,7 +35,7 @@ public class SpiderRecordHandler {
 	protected RecordStorage recordStorage;
 	protected String recordType;
 	protected String recordId;
-	protected SpiderDataGroup recordAsSpiderDataGroup;
+	protected DataGroup recordAsSpiderDataGroup;
 
 	protected DataGroup getRecordTypeDefinition() {
 		return recordStorage.read(RECORD_TYPE, recordType);
@@ -72,10 +71,10 @@ public class SpiderRecordHandler {
 		}
 	}
 
-	protected String extractDataDividerFromData(SpiderDataGroup spiderDataGroup) {
-		SpiderDataGroup recordInfo = spiderDataGroup.extractGroup(RECORD_INFO);
-		SpiderDataGroup dataDivider = recordInfo.extractGroup("dataDivider");
-		return dataDivider.extractAtomicValue(LINKED_RECORD_ID);
+	protected String extractDataDividerFromData(DataGroup spiderDataGroup) {
+		DataGroup recordInfo = spiderDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+		DataGroup dataDivider = recordInfo.getFirstGroupWithNameInData("dataDivider");
+		return dataDivider.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 	}
 
 	protected String getLocalTimeDateAsString(LocalDateTime localDateTime) {
@@ -83,42 +82,39 @@ public class SpiderRecordHandler {
 		return localDateTime.format(formatter);
 	}
 
-	protected void addUpdatedInfoToRecordInfoUsingUserId(SpiderDataGroup recordInfo,
-			String userId) {
-		SpiderDataGroup updatedGroup = createUpdatedGroup();
+	protected void addUpdatedInfoToRecordInfoUsingUserId(DataGroup recordInfo, String userId) {
+		DataGroup updatedGroup = createUpdatedGroup();
 		addUserInfoToUpdatedGroup(userId, updatedGroup);
 		addTimestampToUpdateGroup(recordInfo, updatedGroup);
 		recordInfo.addChild(updatedGroup);
 	}
 
-	SpiderDataGroup createUpdatedGroup() {
-		SpiderDataGroup updatedGroup = SpiderDataGroup.withNameInData("updated");
+	DataGroup createUpdatedGroup() {
+		DataGroup updatedGroup = DataGroup.withNameInData("updated");
 		updatedGroup.setRepeatId("0");
 		return updatedGroup;
 	}
 
-	void addUserInfoToUpdatedGroup(String userId, SpiderDataGroup updatedGroup) {
-		SpiderDataGroup updatedByGroup = createLinkToUserUsingUserIdAndNameInData(userId,
-				"updatedBy");
+	void addUserInfoToUpdatedGroup(String userId, DataGroup updatedGroup) {
+		DataGroup updatedByGroup = createLinkToUserUsingUserIdAndNameInData(userId, "updatedBy");
 		updatedGroup.addChild(updatedByGroup);
 	}
 
-	public void addTimestampToUpdateGroup(SpiderDataGroup recordInfo,
-			SpiderDataGroup updatedGroup) {
-		String tsCreatedUsedAsFirstTsUpdate = recordInfo.extractAtomicValue(TS_CREATED);
+	public void addTimestampToUpdateGroup(DataGroup recordInfo, DataGroup updatedGroup) {
+		String tsCreatedUsedAsFirstTsUpdate = recordInfo
+				.getFirstAtomicValueWithNameInData(TS_CREATED);
 		updatedGroup.addChild(
-				SpiderDataAtomic.withNameInDataAndValue("tsUpdated", tsCreatedUsedAsFirstTsUpdate));
+				DataAtomic.withNameInDataAndValue("tsUpdated", tsCreatedUsedAsFirstTsUpdate));
 	}
 
-	protected SpiderDataGroup createLinkToUserUsingUserIdAndNameInData(String userId,
-			String nameInData) {
-		SpiderDataGroup createdByGroup = SpiderDataGroup.withNameInData(nameInData);
+	protected DataGroup createLinkToUserUsingUserIdAndNameInData(String userId, String nameInData) {
+		DataGroup createdByGroup = DataGroup.withNameInData(nameInData);
 		addLinkToUserUsingUserId(createdByGroup, userId);
 		return createdByGroup;
 	}
 
-	void addLinkToUserUsingUserId(SpiderDataGroup dataGroup, String userId) {
-		dataGroup.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "user"));
-		dataGroup.addChild(SpiderDataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, userId));
+	void addLinkToUserUsingUserId(DataGroup dataGroup, String userId) {
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "user"));
+		dataGroup.addChild(DataAtomic.withNameInDataAndValue(LINKED_RECORD_ID, userId));
 	}
 }

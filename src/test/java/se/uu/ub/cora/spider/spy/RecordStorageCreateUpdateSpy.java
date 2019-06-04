@@ -309,7 +309,7 @@ public class RecordStorageCreateUpdateSpy implements RecordStorage {
 		}
 		if ("image".equals(type) && "image:123456789".equals(id)) {
 			return DataCreator.createRecordWithNameInDataAndIdAndLinkedRecordId("image",
-					"image:123456789", "cora").toDataGroup();
+					"image:123456789", "cora");
 		}
 		DataGroup dataGroupToReturn = DataGroup.withNameInData("someNameInData");
 		dataGroupToReturn.addChild(DataGroup.withNameInData("recordInfo"));

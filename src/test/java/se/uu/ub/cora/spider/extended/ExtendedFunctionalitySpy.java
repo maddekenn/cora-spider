@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
- *
+ * Copyright 2019 Uppsala University Library
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@
 
 package se.uu.ub.cora.spider.extended;
 
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.data.DataGroup;
 
 public class ExtendedFunctionalitySpy implements ExtendedFunctionality {
 	public boolean extendedFunctionalityHasBeenCalled = false;
 	public String token;
 
 	@Override
-	public void useExtendedFunctionality(String token, SpiderDataGroup spiderDataGroup) {
+	public void useExtendedFunctionality(String token, DataGroup spiderDataGroup) {
 		this.token = token;
 		extendedFunctionalityHasBeenCalled = true;
 	}

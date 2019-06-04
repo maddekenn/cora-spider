@@ -31,6 +31,7 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecord;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
@@ -39,7 +40,6 @@ import se.uu.ub.cora.spider.authorization.AuthorizationException;
 import se.uu.ub.cora.spider.authorization.NeverAuthorisedStub;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.SpiderDataRecord;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -100,8 +100,7 @@ public class SpiderRecordReaderTest {
 
 	@Test
 	public void testReadAuthorized() {
-		SpiderDataRecord record = recordReader.readRecord("someToken78678567", "place",
-				"place:0001");
+		DataRecord record = recordReader.readRecord("someToken78678567", "place", "place:0001");
 		DataGroup groupOut = record.getDataGroup();
 		assertEquals(groupOut.getNameInData(), "authority",
 				"recordOut.getNameInData should be authority");
@@ -109,8 +108,7 @@ public class SpiderRecordReaderTest {
 
 	@Test
 	public void testReadAuthorized2() {
-		SpiderDataRecord record = recordReader.readRecord("someToken78678567", "place",
-				"place:0001");
+		DataRecord record = recordReader.readRecord("someToken78678567", "place", "place:0001");
 		DataGroup groupOut = record.getDataGroup();
 		assertEquals(groupOut.getNameInData(), "authority");
 
@@ -134,8 +132,8 @@ public class SpiderRecordReaderTest {
 	public void testReadRecordAbstractRecordType() {
 		recordStorage = new RecordStorageSpy();
 		setUpDependencyProvider();
-		SpiderDataRecord readRecord = recordReader.readRecord("someToken78678567",
-				"abstractAuthority", "place:0001");
+		DataRecord readRecord = recordReader.readRecord("someToken78678567", "abstractAuthority",
+				"place:0001");
 		assertNotNull(readRecord);
 
 		AuthorizatorAlwaysAuthorizedSpy authorizatorSpy = ((AuthorizatorAlwaysAuthorizedSpy) authorizator);
@@ -210,8 +208,8 @@ public class SpiderRecordReaderTest {
 		authorisedExceptStub.notAuthorizedForRecordTypeAndActions.put("publicReadType", hashSet);
 		setUpDependencyProvider();
 		// publicReadType
-		SpiderDataRecord readRecord = recordReader.readRecord("unauthorizedUserId",
-				"publicReadType", "publicReadType:0001");
+		DataRecord readRecord = recordReader.readRecord("unauthorizedUserId", "publicReadType",
+				"publicReadType:0001");
 		assertNotNull(readRecord);
 	}
 
@@ -221,8 +219,8 @@ public class SpiderRecordReaderTest {
 		authorizator = new AuthorizatorNotAuthorizedRequiredRulesButForActionOnRecordType();
 		setUpDependencyProvider();
 		// publicReadType
-		SpiderDataRecord readRecord = recordReader.readRecord("unauthorizedUserId",
-				"publicReadType", "publicReadType:0001");
+		DataRecord readRecord = recordReader.readRecord("unauthorizedUserId", "publicReadType",
+				"publicReadType:0001");
 
 		assertNotNull(readRecord);
 	}

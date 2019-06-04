@@ -85,7 +85,7 @@ public class TestDataRecordInMemoryStorage {
 
 	private static void addSecondPlace(RecordStorage recordsInMemory) {
 		DataGroup dataGroup = DataCreator.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordId(
-				"authority", "place:0002", "place", "cora").toDataGroup();
+				"authority", "place:0002", "place", "cora");
 
 		DataGroup dataRecordLink = DataGroup.withNameInData("link");
 		dataGroup.addChild(dataRecordLink);
@@ -97,7 +97,7 @@ public class TestDataRecordInMemoryStorage {
 
 	private static void addThirdPlace(RecordStorage recordsInMemory) {
 		DataGroup dataGroup = DataCreator.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordId(
-				"authority", "place:0003", "place", "cora").toDataGroup();
+				"authority", "place:0003", "place", "cora");
 
 		DataGroup collectedLinksList = DataGroup.withNameInData("collectedLinksList");
 		recordsInMemory.create("place", "place:0003", dataGroup, null, collectedLinksList, "cora");
@@ -105,7 +105,7 @@ public class TestDataRecordInMemoryStorage {
 
 	private static void addFourthPlace(RecordStorage recordsInMemory) {
 		DataGroup dataGroup = DataCreator.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordId(
-				"authority", "place:0004", "place", "cora").toDataGroup();
+				"authority", "place:0004", "place", "cora");
 
 		DataGroup dataRecordLink = DataGroup.withNameInData("link");
 		dataGroup.addChild(dataRecordLink);
@@ -258,7 +258,7 @@ public class TestDataRecordInMemoryStorage {
 
 	private static void addImageOne(RecordStorageInMemoryStub recordsInMemory) {
 		DataGroup dataGroup = DataCreator.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordId(
-				"image", "image:123456789", "image", "cora").toDataGroup();
+				"image", "image:123456789", "image", "cora");
 		DataGroup resourceInfo = DataGroup.withNameInData("resourceInfo");
 		dataGroup.addChild(resourceInfo);
 		DataGroup master = DataGroup.withNameInData("master");

@@ -67,10 +67,12 @@ public class DataGroupToRecordEnhancerImp implements DataGroupToRecordEnhancer {
 		this.dataGroup = dataGroup;
 		collectedTerms = getCollectedTermsForRecord(recordType, dataGroup);
 		// SpiderDataGroup spiderDataGroup = SpiderDataGroup.fromDataGroup(dataGroup);
-		record = DataRecord.withDataGroup(dataGroup);
+		DataGroupEnhancer dataGroupEnhancer = new DataGroupEnhancer();
+		DataGroup enhancedDataGroup = dataGroupEnhancer.enhance(dataGroup);
+		record = DataRecord.withDataGroup(enhancedDataGroup);
 		handledRecordId = getRecordIdFromDataRecord(record);
 		addActions();
-		addReadActionToDataRecordLinks(dataGroup);
+		addReadActionToDataRecordLinks(enhancedDataGroup);
 		return record;
 	}
 
@@ -307,32 +309,11 @@ public class DataGroupToRecordEnhancerImp implements DataGroupToRecordEnhancer {
 	}
 
 	private boolean isLink(DataElement spiderDataChild) {
-		// return isRecordLink(spiderDataChild) || isResourceLink(spiderDataChild);
-		return dataGroupIsRecordLink(spiderDataChild) || dataGroupIsResourceLink(spiderDataChild);
-	}
-
-	private boolean dataGroupIsRecordLink(DataElement dataChild) {
-		if (dataChild instanceof DataGroup) {
-			DataGroup dataChildGroup = (DataGroup) dataChild;
-			return dataChildGroup.containsChildWithNameInData("linkedRecordType")
-					&& dataChildGroup.containsChildWithNameInData(LINKED_RECORD_ID);
-		}
-		return false;
+		return isRecordLink(spiderDataChild) || isResourceLink(spiderDataChild);
 	}
 
 	private boolean isRecordLink(DataElement spiderDataChild) {
 		return spiderDataChild instanceof DataRecordLink;
-	}
-
-	private boolean dataGroupIsResourceLink(DataElement dataChild) {
-		if (dataChild instanceof DataGroup) {
-			DataGroup dataChildGroup = (DataGroup) dataChild;
-			return dataChildGroup.containsChildWithNameInData("streamId")
-					&& dataChildGroup.containsChildWithNameInData("filename")
-					&& dataChildGroup.containsChildWithNameInData("filesize")
-					&& dataChildGroup.containsChildWithNameInData("mimeType");
-		}
-		return false;
 	}
 
 	private boolean isResourceLink(DataElement spiderDataChild) {

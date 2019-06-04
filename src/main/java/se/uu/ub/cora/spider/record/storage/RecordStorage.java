@@ -21,25 +21,26 @@ package se.uu.ub.cora.spider.record.storage;
 
 import java.util.Collection;
 
-import se.uu.ub.cora.bookkeeper.data.DataGroup;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.SpiderReadResult;
 
 public interface RecordStorage {
 
 	DataGroup read(String type, String id);
 
-	void create(String type, String id, DataGroup record, DataGroup collectedTerms, DataGroup linkList,
-			String dataDivider);
+	void create(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider);
 
 	void deleteByTypeAndId(String type, String id);
 
 	boolean linksExistForRecord(String type, String id);
 
-	void update(String type, String id, DataGroup record, DataGroup collectedTerms, DataGroup linkList, String dataDivider);
+	void update(String type, String id, DataGroup record, DataGroup collectedTerms,
+			DataGroup linkList, String dataDivider);
 
-    SpiderReadResult readList(String type, DataGroup filter);
+	SpiderReadResult readList(String type, DataGroup filter);
 
-    SpiderReadResult readAbstractList(String type, DataGroup filter);
+	SpiderReadResult readAbstractList(String type, DataGroup filter);
 
 	DataGroup readLinkList(String type, String id);
 

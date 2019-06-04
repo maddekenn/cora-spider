@@ -23,9 +23,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.spider.consistency.MetadataConsistencyGroupAndCollectionValidatorImp;
-import se.uu.ub.cora.spider.consistency.MetadataConsistencyValidator;
-import se.uu.ub.cora.spider.consistency.MetadataConsistencyValidatorFactory;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.spy.RecordStorageSpy;
 

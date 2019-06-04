@@ -18,21 +18,25 @@
  */
 package se.uu.ub.cora.spider.extended;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
-import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
-import se.uu.ub.cora.spider.spy.*;
-import se.uu.ub.cora.spider.testdata.DataCreator;
+import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.testng.Assert.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
+import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
+import se.uu.ub.cora.spider.data.SpiderDataAtomic;
+import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
+import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
+import se.uu.ub.cora.spider.spy.RecordIndexerSpy;
+import se.uu.ub.cora.spider.spy.RecordStorageSpy;
+import se.uu.ub.cora.spider.spy.SpiderRecordDeleterSpy;
+import se.uu.ub.cora.spider.testdata.DataCreator;
 
 public class WorkOrderDeleterAsExtendedFunctionalityTest {
 

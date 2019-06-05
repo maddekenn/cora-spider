@@ -36,6 +36,7 @@ import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecord;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
@@ -45,8 +46,6 @@ import se.uu.ub.cora.spider.authorization.NeverAuthorisedStub;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.data.DataMissingException;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataRecord;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceFactory;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceFactoryImp;
@@ -130,14 +129,14 @@ public class SpiderUploaderTest {
 		keyCalculator = new RuleCalculatorSpy();
 		setUpDependencyProvider();
 
-		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
+		DataGroup spiderDataGroup = DataGroup.withNameInData("nameInData");
 		spiderDataGroup.addChild(
 				SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider("spyType",
 						"spyId", "cora"));
 		InputStream stream = new ByteArrayInputStream("a string".getBytes(StandardCharsets.UTF_8));
 
-		SpiderDataRecord recordUpdated = uploader.upload("someToken78678567", "image",
-				"image:123456789", stream, "someFileName");
+		DataRecord recordUpdated = uploader.upload("someToken78678567", "image", "image:123456789",
+				stream, "someFileName");
 		assertResourceInfoIsCorrect(recordUpdated);
 
 		assertTrue(((RecordStorageSpy) recordStorage).readWasCalled);
@@ -198,8 +197,8 @@ public class SpiderUploaderTest {
 	public void testUploadStream() {
 		InputStream stream = new ByteArrayInputStream("a string".getBytes(StandardCharsets.UTF_8));
 
-		SpiderDataRecord recordUpdated = uploader.upload("someToken78678567", "image",
-				"image:123456789", stream, "someFileName");
+		DataRecord recordUpdated = uploader.upload("someToken78678567", "image", "image:123456789",
+				stream, "someFileName");
 
 		assertEquals(streamStorage.stream, stream);
 
@@ -222,34 +221,35 @@ public class SpiderUploaderTest {
 		assertEquals(authorizatorSpy.collectedTerms.get(0), returnedCollectedTerms);
 	}
 
-	private void assertStreamStorageCalledCorrectly(SpiderDataRecord recordUpdated) {
-		SpiderDataGroup groupUpdated = recordUpdated.getDataGroup();
-		SpiderDataGroup recordInfo = groupUpdated.extractGroup("recordInfo");
-		SpiderDataGroup dataDivider = recordInfo.extractGroup("dataDivider");
+	private void assertStreamStorageCalledCorrectly(DataRecord recordUpdated) {
+		DataGroup groupUpdated = recordUpdated.getDataGroup();
+		DataGroup recordInfo = groupUpdated.getFirstGroupWithNameInData("recordInfo");
+		DataGroup dataDivider = recordInfo.getFirstGroupWithNameInData("dataDivider");
 
-		SpiderDataGroup resourceInfo = groupUpdated.extractGroup("resourceInfo");
-		SpiderDataGroup master = resourceInfo.extractGroup("master");
+		DataGroup resourceInfo = groupUpdated.getFirstGroupWithNameInData("resourceInfo");
+		DataGroup master = resourceInfo.getFirstGroupWithNameInData("master");
 
-		String dataDividerRecordId = dataDivider.extractAtomicValue("linkedRecordId");
+		String dataDividerRecordId = dataDivider
+				.getFirstAtomicValueWithNameInData("linkedRecordId");
 		assertEquals(dataDividerRecordId, streamStorage.dataDivider);
 
-		String streamId = master.extractAtomicValue("streamId");
+		String streamId = master.getFirstAtomicValueWithNameInData("streamId");
 		assertEquals(streamId, streamStorage.streamId);
 
-		String size = master.extractAtomicValue("filesize");
+		String size = master.getFirstAtomicValueWithNameInData("filesize");
 		assertEquals(size, String.valueOf(streamStorage.size));
 	}
 
-	private void assertResourceInfoIsCorrect(SpiderDataRecord recordUpdated) {
-		SpiderDataGroup groupUpdated = recordUpdated.getDataGroup();
+	private void assertResourceInfoIsCorrect(DataRecord recordUpdated) {
+		DataGroup groupUpdated = recordUpdated.getDataGroup();
 
-		SpiderDataGroup resourceInfo = groupUpdated.extractGroup("resourceInfo");
-		SpiderDataGroup master = resourceInfo.extractGroup("master");
+		DataGroup resourceInfo = groupUpdated.getFirstGroupWithNameInData("resourceInfo");
+		DataGroup master = resourceInfo.getFirstGroupWithNameInData("master");
 
-		String fileName = master.extractAtomicValue("filename");
+		String fileName = master.getFirstAtomicValueWithNameInData("filename");
 		assertEquals(fileName, "someFileName");
 
-		String mimeType = master.extractAtomicValue("mimeType");
+		String mimeType = master.getFirstAtomicValueWithNameInData("mimeType");
 		assertEquals(mimeType, "application/octet-stream");
 	}
 

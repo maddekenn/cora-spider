@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,9 +23,8 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.consistency.MetadataConsistencyValidatorSpy;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.extended.MetadataConsistencyValidatorAsExtendedFunctionality;
 
 public class MetadataConsistencyValidatorAsExtendedFunctionalityTest {
 
@@ -35,7 +34,7 @@ public class MetadataConsistencyValidatorAsExtendedFunctionalityTest {
 		MetadataConsistencyValidatorAsExtendedFunctionality validator = MetadataConsistencyValidatorAsExtendedFunctionality
 				.usingValidator(metadataConsistencyValidator);
 		validator.useExtendedFunctionality("someUserId",
-				SpiderDataGroup.withNameInData("someNameInData"));
+				DataGroup.withNameInData("someNameInData"));
 		assertTrue(metadataConsistencyValidator.validationHasBeenCalled);
 	}
 

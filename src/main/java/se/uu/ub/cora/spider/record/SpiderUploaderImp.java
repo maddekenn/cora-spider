@@ -22,12 +22,11 @@ package se.uu.ub.cora.spider.record;
 import java.io.InputStream;
 
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
+import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecord;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.data.DataMissingException;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataRecord;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceProvider;
 import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
@@ -38,7 +37,7 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 	private SpiderAuthorizator spiderAuthorizator;
 	private RecordIdGenerator idGenerator;
 	private StreamStorage streamStorage;
-	private SpiderDataGroup spiderRecordRead;
+	private DataGroup spiderRecordRead;
 	private String streamId;
 	private DataGroupTermCollector collectTermCollector;
 
@@ -57,7 +56,7 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 	}
 
 	@Override
-	public SpiderDataRecord upload(String authToken, String type, String id, InputStream stream,
+	public DataRecord upload(String authToken, String type, String id, InputStream stream,
 			String fileName) {
 		this.authToken = authToken;
 		this.recordType = type;
@@ -67,7 +66,8 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 		checkRecordTypeIsChildOfBinary();
 
 		DataGroup recordRead = recordStorage.read(type, id);
-		spiderRecordRead = SpiderDataGroup.fromDataGroup(recordRead);
+		// spiderRecordRead = SpiderDataGroup.fromDataGroup(recordRead);
+		spiderRecordRead = recordRead;
 		checkUserIsAuthorisedToUploadData(recordRead);
 		checkStreamIsPresent(stream);
 		checkFileNameIsPresent(fileName);
@@ -136,24 +136,22 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 	}
 
 	private void addResourceInfoToMetadataRecord(String fileName, long fileSize) {
-		SpiderDataGroup resourceInfo = SpiderDataGroup.withNameInData(RESOURCE_INFO);
+		DataGroup resourceInfo = DataGroup.withNameInData(RESOURCE_INFO);
 		spiderRecordRead.addChild(resourceInfo);
 
-		SpiderDataGroup master = SpiderDataGroup.withNameInData("master");
+		DataGroup master = DataGroup.withNameInData("master");
 		resourceInfo.addChild(master);
 
-		SpiderDataAtomic streamId2 = SpiderDataAtomic.withNameInDataAndValue("streamId", streamId);
+		DataAtomic streamId2 = DataAtomic.withNameInDataAndValue("streamId", streamId);
 		master.addChild(streamId2);
 
-		SpiderDataAtomic uploadedFileName = SpiderDataAtomic.withNameInDataAndValue("filename",
-				fileName);
+		DataAtomic uploadedFileName = DataAtomic.withNameInDataAndValue("filename", fileName);
 		master.addChild(uploadedFileName);
 
-		SpiderDataAtomic size = SpiderDataAtomic.withNameInDataAndValue("filesize",
-				String.valueOf(fileSize));
+		DataAtomic size = DataAtomic.withNameInDataAndValue("filesize", String.valueOf(fileSize));
 		master.addChild(size);
 
-		SpiderDataAtomic mimeType = SpiderDataAtomic.withNameInDataAndValue("mimeType",
+		DataAtomic mimeType = DataAtomic.withNameInDataAndValue("mimeType",
 				"application/octet-stream");
 		master.addChild(mimeType);
 	}

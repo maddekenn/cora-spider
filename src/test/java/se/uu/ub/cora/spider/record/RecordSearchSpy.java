@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.data.SpiderReadResult;
 import se.uu.ub.cora.spider.testdata.DataCreator;
 
@@ -32,8 +31,7 @@ public class RecordSearchSpy implements RecordSearch {
 	List<DataGroup> listOfSearchData = new ArrayList<>();
 	public DataGroup place44 = DataCreator
 			.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordIdAndCreatedBy("place", "place44",
-					"place", "systemOne", "someUserId")
-			.toDataGroup();
+					"place", "systemOne", "someUserId");
 	public long totalNumberOfMatches = 1;
 
 	@Override
@@ -48,15 +46,15 @@ public class RecordSearchSpy implements RecordSearch {
 		spiderSearchResult.totalNumberOfMatches = totalNumberOfMatches;
 
 		if (list.contains("image")) {
-			SpiderDataGroup image44 = DataCreator
+			DataGroup image44 = DataCreator
 					.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordIdAndCreatedBy("image",
 							"image44", "image", "systemOne", "someUserId");
-			spiderSearchResult.listOfDataGroups.add(image44.toDataGroup());
+			spiderSearchResult.listOfDataGroups.add(image44);
 
-			SpiderDataGroup image45 = DataCreator
+			DataGroup image45 = DataCreator
 					.createRecordWithNameInDataAndIdAndTypeAndLinkedRecordIdAndCreatedBy("binary",
 							"binary45", "binary", "systemOne", "someUserId");
-			spiderSearchResult.listOfDataGroups.add(image45.toDataGroup());
+			spiderSearchResult.listOfDataGroups.add(image45);
 		}
 		return spiderSearchResult;
 	}

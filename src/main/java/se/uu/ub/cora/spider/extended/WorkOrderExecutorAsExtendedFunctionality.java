@@ -25,7 +25,6 @@ import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.RecordTypeHandler;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -55,8 +54,8 @@ public class WorkOrderExecutorAsExtendedFunctionality implements ExtendedFunctio
 	}
 
 	@Override
-	public void useExtendedFunctionality(String authToken, SpiderDataGroup spiderDataGroup) {
-		DataGroup workOrder = spiderDataGroup.toDataGroup();
+	public void useExtendedFunctionality(String authToken, DataGroup spiderDataGroup) {
+		DataGroup workOrder = spiderDataGroup;
 		recordTypeToIndex = getRecordTypeToIndexFromWorkOrder(workOrder);
 		recordIdToIndex = getRecordIdToIndexFromWorkOrder(workOrder);
 		indexDataIfUserIsAuthorized(authToken);

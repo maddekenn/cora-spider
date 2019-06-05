@@ -7,8 +7,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 
 public class AppTokenEnhancerAsExtendedFunctionalityTest {
 
@@ -26,24 +26,21 @@ public class AppTokenEnhancerAsExtendedFunctionalityTest {
 
 	@Test
 	public void generateAndAddAppToken() {
-		SpiderDataGroup minimalGroup = SpiderDataGroup.withNameInData("appToken");
+		DataGroup minimalGroup = DataGroup.withNameInData("appToken");
 		extendedFunctionality.useExtendedFunctionality("someToken", minimalGroup);
-		SpiderDataAtomic token = (SpiderDataAtomic) minimalGroup
-				.getFirstChildWithNameInData("token");
+		DataAtomic token = (DataAtomic) minimalGroup.getFirstChildWithNameInData("token");
 		assertTrue(token.getValue().length() > 30);
 	}
 
 	@Test
 	public void generateAndAddAppTokenDifferentTokens() {
-		SpiderDataGroup minimalGroup = SpiderDataGroup.withNameInData("appToken");
+		DataGroup minimalGroup = DataGroup.withNameInData("appToken");
 		extendedFunctionality.useExtendedFunctionality("someToken", minimalGroup);
-		SpiderDataAtomic token = (SpiderDataAtomic) minimalGroup
-				.getFirstChildWithNameInData("token");
+		DataAtomic token = (DataAtomic) minimalGroup.getFirstChildWithNameInData("token");
 
-		SpiderDataGroup minimalGroup2 = SpiderDataGroup.withNameInData("appToken");
+		DataGroup minimalGroup2 = DataGroup.withNameInData("appToken");
 		extendedFunctionality.useExtendedFunctionality("someToken", minimalGroup2);
-		SpiderDataAtomic token2 = (SpiderDataAtomic) minimalGroup2
-				.getFirstChildWithNameInData("token");
+		DataAtomic token2 = (DataAtomic) minimalGroup2.getFirstChildWithNameInData("token");
 
 		assertNotEquals(token.getValue(), token2.getValue());
 	}

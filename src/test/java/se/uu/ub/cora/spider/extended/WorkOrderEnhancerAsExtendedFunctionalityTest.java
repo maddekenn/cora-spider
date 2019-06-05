@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -26,8 +26,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 
 public class WorkOrderEnhancerAsExtendedFunctionalityTest {
 
@@ -45,32 +45,29 @@ public class WorkOrderEnhancerAsExtendedFunctionalityTest {
 
 	@Test
 	public void testAddRecordInfo() {
-		SpiderDataGroup workOrder = SpiderDataGroup.withNameInData("workOrder");
+		DataGroup workOrder = DataGroup.withNameInData("workOrder");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
-		SpiderDataGroup recordInfo = (SpiderDataGroup) workOrder
-				.getFirstChildWithNameInData("recordInfo");
+		DataGroup recordInfo = (DataGroup) workOrder.getFirstChildWithNameInData("recordInfo");
 		assertTrue(recordInfo.containsChildWithNameInData("dataDivider"));
-		SpiderDataGroup dataDivider = (SpiderDataGroup) recordInfo
-				.getFirstChildWithNameInData("dataDivider");
-		SpiderDataAtomic linkedRecordType = (SpiderDataAtomic) dataDivider
+		DataGroup dataDivider = (DataGroup) recordInfo.getFirstChildWithNameInData("dataDivider");
+		DataAtomic linkedRecordType = (DataAtomic) dataDivider
 				.getFirstChildWithNameInData("linkedRecordType");
 		assertEquals(linkedRecordType.getValue(), "system");
-		SpiderDataAtomic linkedRecordId = (SpiderDataAtomic) dataDivider
+		DataAtomic linkedRecordId = (DataAtomic) dataDivider
 				.getFirstChildWithNameInData("linkedRecordId");
 		assertEquals(linkedRecordId.getValue(), "cora");
 	}
 
 	@Test
 	public void testRecordInfoAlreadyExistsNotReplacedByExtendedFunctionality() {
-		SpiderDataGroup workOrder = SpiderDataGroup.withNameInData("workOrder");
-		workOrder.addChild(SpiderDataGroup.withNameInData("recordInfo"));
+		DataGroup workOrder = DataGroup.withNameInData("workOrder");
+		workOrder.addChild(DataGroup.withNameInData("recordInfo"));
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		assertEquals(workOrder.getChildren().size(), 1);
 
-		SpiderDataGroup recordInfo = (SpiderDataGroup) workOrder
-				.getFirstChildWithNameInData("recordInfo");
+		DataGroup recordInfo = (DataGroup) workOrder.getFirstChildWithNameInData("recordInfo");
 		assertFalse(recordInfo.containsChildWithNameInData("dataDivider"));
 	}
 }

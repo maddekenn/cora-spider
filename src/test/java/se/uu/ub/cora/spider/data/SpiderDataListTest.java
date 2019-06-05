@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,6 +25,11 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.data.Data;
+import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataList;
+import se.uu.ub.cora.data.DataRecord;
+
 public class SpiderDataListTest {
 	@Test
 	public void testInit() {
@@ -35,11 +40,11 @@ public class SpiderDataListTest {
 
 	@Test
 	public void testAddRecord() {
-		SpiderDataList spiderDataList = SpiderDataList.withContainDataOfType("metadata");
-		SpiderDataGroup spiderDataGroup = SpiderDataGroup.withNameInData("spiderDataGroupId");
-		SpiderDataRecord record = SpiderDataRecord.withDataGroup(spiderDataGroup);
+		DataList spiderDataList = DataList.withContainDataOfType("metadata");
+		DataGroup spiderDataGroup = DataGroup.withNameInData("spiderDataGroupId");
+		DataRecord record = DataRecord.withDataGroup(spiderDataGroup);
 		spiderDataList.addData(record);
-		List<SpiderData> records = spiderDataList.getDataList();
+		List<Data> records = spiderDataList.getDataList();
 		assertEquals(records.get(0), record);
 	}
 

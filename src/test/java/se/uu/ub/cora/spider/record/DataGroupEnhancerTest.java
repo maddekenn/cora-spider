@@ -252,7 +252,7 @@ public class DataGroupEnhancerTest {
 		DataGroup dataGroup = DataGroup.withNameInData("someOtherDataGroup");
 
 		DataGroup resourceLinkChild = createAndAddResourceLinkChildWithStreamId(dataGroup);
-		resourceLinkChild.addChild(DataAtomic.withNameInDataAndValue("fileName", "someFileName"));
+		resourceLinkChild.addChild(DataAtomic.withNameInDataAndValue("filename", "someFileName"));
 		resourceLinkChild.addChild(DataAtomic.withNameInDataAndValue("filesize", "678"));
 		resourceLinkChild.addChild(DataAtomic.withNameInDataAndValue("mimeType", "someMimeType"));
 

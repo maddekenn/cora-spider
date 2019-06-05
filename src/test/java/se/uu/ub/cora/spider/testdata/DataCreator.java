@@ -21,8 +21,6 @@ package se.uu.ub.cora.spider.testdata;
 
 import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.spy.DataRecordLinkCollectorSpy;
 
 public final class DataCreator {
@@ -359,22 +357,21 @@ public final class DataCreator {
 		return dataGroup;
 	}
 
-	public static SpiderDataGroup createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(String id,
+	public static DataGroup createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(String id,
 			String recordType, String recordId) {
-		SpiderDataGroup workOrder = SpiderDataGroup.withNameInData("workOrder");
-		SpiderDataGroup recordInfo = SpiderDataGroup.withNameInData("recordInfo");
-		recordInfo.addChild(SpiderDataAtomic.withNameInDataAndValue("id", id));
+		DataGroup workOrder = DataGroup.withNameInData("workOrder");
+		DataGroup recordInfo = DataGroup.withNameInData("recordInfo");
+		recordInfo.addChild(DataAtomic.withNameInDataAndValue("id", id));
 		workOrder.addChild(recordInfo);
 
-		SpiderDataGroup recordTypeLink = SpiderDataGroup.withNameInData("recordType");
-		recordTypeLink.addChild(
-				SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+		DataGroup recordTypeLink = DataGroup.withNameInData("recordType");
 		recordTypeLink
-				.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", recordType));
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+		recordTypeLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", recordType));
 		workOrder.addChild(recordTypeLink);
 
-		workOrder.addChild(SpiderDataAtomic.withNameInDataAndValue("recordId", recordId));
-		workOrder.addChild(SpiderDataAtomic.withNameInDataAndValue("type", "index"));
+		workOrder.addChild(DataAtomic.withNameInDataAndValue("recordId", recordId));
+		workOrder.addChild(DataAtomic.withNameInDataAndValue("type", "index"));
 		return workOrder;
 	}
 

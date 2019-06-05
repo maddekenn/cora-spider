@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -29,12 +29,12 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.linkcollector.DataRecordLinkCollector;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceFactorySpy2;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceProvider;
@@ -94,23 +94,24 @@ public class UserUpdaterForAppTokenAsExtendedFunctionalityTest {
 
 	@Test
 	public void useExtendedFunctionality() {
-		SpiderDataGroup minimalAppTokenGroup = SpiderDataGroup.withNameInData("appToken");
+		DataGroup minimalAppTokenGroup = DataGroup.withNameInData("appToken");
 		minimalAppTokenGroup
 				.addChild(SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider(
 						"appToken", "someAppTokenId", "cora"));
-		minimalAppTokenGroup
-				.addChild(SpiderDataAtomic.withNameInDataAndValue("note", "my device!"));
+		minimalAppTokenGroup.addChild(DataAtomic.withNameInDataAndValue("note", "my device!"));
 
 		extendedFunctionality.useExtendedFunctionality("dummy1Token", minimalAppTokenGroup);
 		SpiderRecordUpdaterSpy spiderRecordUpdaterSpy = spiderInstanceFactory.createdUpdaters
 				.get(0);
-		SpiderDataGroup updatedUserDataGroup = spiderRecordUpdaterSpy.record;
-		SpiderDataGroup userAppTokenGroup = (SpiderDataGroup) updatedUserDataGroup
+		DataGroup updatedUserDataGroup = spiderRecordUpdaterSpy.record;
+		DataGroup userAppTokenGroup = (DataGroup) updatedUserDataGroup
 				.getFirstChildWithNameInData("userAppTokenGroup");
-		assertEquals(userAppTokenGroup.extractAtomicValue("note"), "my device!");
-		SpiderDataGroup apptokenLink = userAppTokenGroup.extractGroup("appTokenLink");
-		assertEquals(apptokenLink.extractAtomicValue("linkedRecordType"), "appToken");
-		assertEquals(apptokenLink.extractAtomicValue("linkedRecordId"), "someAppTokenId");
+		assertEquals(userAppTokenGroup.getFirstAtomicValueWithNameInData("note"), "my device!");
+		DataGroup apptokenLink = userAppTokenGroup.getFirstGroupWithNameInData("appTokenLink");
+		assertEquals(apptokenLink.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"appToken");
+		assertEquals(apptokenLink.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"someAppTokenId");
 		assertNotNull(userAppTokenGroup.getRepeatId());
 	}
 

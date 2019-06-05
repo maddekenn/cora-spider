@@ -33,7 +33,6 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
 import se.uu.ub.cora.spider.spy.RecordIndexerSpy;
@@ -72,9 +71,8 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 
 	@Test
 	public void testIndexData() {
-		SpiderDataGroup workOrder = DataCreator
-				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book",
-						"book1");
+		DataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(
+				"someGeneratedId", "book", "book1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		assertTrue(termCollector.collectTermsWasCalled);
@@ -97,9 +95,8 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 	public void testIndexDataForChildOfAbstract() {
 		dependencyProvider.recordStorage = new RecordStorageCreateUpdateSpy();
 		setUpDependencyProvider();
-		SpiderDataGroup workOrder = DataCreator
-				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "image",
-						"image1");
+		DataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(
+				"someGeneratedId", "image", "image1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		List<String> ids = recordIndexer.ids;
@@ -118,9 +115,8 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 		actions.add("index");
 		authorizer.notAuthorizedForRecordTypeAndActions.put("book", actions);
 
-		SpiderDataGroup workOrder = DataCreator
-				.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex("someGeneratedId", "book",
-						"book1");
+		DataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(
+				"someGeneratedId", "book", "book1");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 
 		assertFalse(termCollector.collectTermsWasCalled);

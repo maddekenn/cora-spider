@@ -30,7 +30,6 @@ import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataList;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.data.SpiderReadResult;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
@@ -72,8 +71,8 @@ public final class SpiderRecordSearcherImp implements SpiderRecordSearcher {
 	}
 
 	@Override
-	public DataList search(String authToken, String searchId, SpiderDataGroup spiderSearchData) {
-		this.searchData = spiderSearchData.toDataGroup();
+	public DataList search(String authToken, String searchId, DataGroup spiderSearchData) {
+		this.searchData = spiderSearchData;
 		tryToGetActiveUser(authToken);
 		readSearchDataFromStorage(searchId);
 		validateSearchInputForUser();

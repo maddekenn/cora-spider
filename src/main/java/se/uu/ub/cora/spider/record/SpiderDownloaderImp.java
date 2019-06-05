@@ -23,9 +23,8 @@ package se.uu.ub.cora.spider.record;
 import java.io.InputStream;
 
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataMissingException;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.DataMissingException;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.data.SpiderInputStream;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
@@ -37,7 +36,7 @@ public final class SpiderDownloaderImp extends SpiderBinary implements SpiderDow
 	private String resourceName;
 	private SpiderAuthorizator spiderAuthorizator;
 	private StreamStorage streamStorage;
-	private SpiderDataGroup spiderRecordRead;
+	private DataGroup spiderRecordRead;
 
 	private SpiderDownloaderImp(SpiderDependencyProvider dependencyProvider) {
 		this.authenticator = dependencyProvider.getAuthenticator();
@@ -65,7 +64,7 @@ public final class SpiderDownloaderImp extends SpiderBinary implements SpiderDow
 		checkRecordTypeIsChildOfBinary();
 
 		DataGroup recordRead = recordStorage.read(type, id);
-		spiderRecordRead = SpiderDataGroup.fromDataGroup(recordRead);
+		spiderRecordRead = recordRead;
 
 		String streamId = tryToExtractStreamIdFromResource(resourceName);
 
@@ -87,9 +86,9 @@ public final class SpiderDownloaderImp extends SpiderBinary implements SpiderDow
 
 	private String tryToExtractStreamIdFromResource(String resource) {
 		try {
-			SpiderDataGroup resourceInfo = spiderRecordRead.extractGroup(RESOURCE_INFO);
-			SpiderDataGroup requestedResource = resourceInfo.extractGroup(resource);
-			return requestedResource.extractAtomicValue("streamId");
+			DataGroup resourceInfo = spiderRecordRead.getFirstGroupWithNameInData(RESOURCE_INFO);
+			DataGroup requestedResource = resourceInfo.getFirstGroupWithNameInData(resource);
+			return requestedResource.getFirstAtomicValueWithNameInData("streamId");
 		} catch (DataMissingException e) {
 			throw new RecordNotFoundException("resource not found");
 		}
@@ -110,14 +109,14 @@ public final class SpiderDownloaderImp extends SpiderBinary implements SpiderDow
 	}
 
 	private String extractStreamNameFromData() {
-		SpiderDataGroup resourceInfo = spiderRecordRead.extractGroup(RESOURCE_INFO);
-		SpiderDataGroup requestedResource = resourceInfo.extractGroup(resourceName);
-		return requestedResource.extractAtomicValue("filename");
+		DataGroup resourceInfo = spiderRecordRead.getFirstGroupWithNameInData(RESOURCE_INFO);
+		DataGroup requestedResource = resourceInfo.getFirstGroupWithNameInData(resourceName);
+		return requestedResource.getFirstAtomicValueWithNameInData("filename");
 	}
 
 	private long extractStreamSizeFromData() {
-		SpiderDataGroup resourceInfo = spiderRecordRead.extractGroup(RESOURCE_INFO);
-		SpiderDataGroup requestedResource = resourceInfo.extractGroup(resourceName);
-		return Long.valueOf(requestedResource.extractAtomicValue("filesize"));
+		DataGroup resourceInfo = spiderRecordRead.getFirstGroupWithNameInData(RESOURCE_INFO);
+		DataGroup requestedResource = resourceInfo.getFirstGroupWithNameInData(resourceName);
+		return Long.valueOf(requestedResource.getFirstAtomicValueWithNameInData("filesize"));
 	}
 }

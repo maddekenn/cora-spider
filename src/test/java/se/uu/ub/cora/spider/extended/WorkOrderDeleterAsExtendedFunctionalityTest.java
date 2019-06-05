@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,21 +18,25 @@
  */
 package se.uu.ub.cora.spider.extended;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
-import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
-import se.uu.ub.cora.spider.spy.*;
-import se.uu.ub.cora.spider.testdata.DataCreator;
+import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.testng.Assert.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
+import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
+import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
+import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
+import se.uu.ub.cora.spider.spy.RecordIndexerSpy;
+import se.uu.ub.cora.spider.spy.RecordStorageSpy;
+import se.uu.ub.cora.spider.spy.SpiderRecordDeleterSpy;
+import se.uu.ub.cora.spider.testdata.DataCreator;
 
 public class WorkOrderDeleterAsExtendedFunctionalityTest {
 
@@ -56,17 +60,15 @@ public class WorkOrderDeleterAsExtendedFunctionalityTest {
 
 	private void setUpDependencyProvider() {
 		recordDeleter = new SpiderRecordDeleterSpy();
-		extendedFunctionality = WorkOrderDeleterAsExtendedFunctionality
-				.usingDeleter(recordDeleter);
-		termCollector = (DataGroupTermCollectorSpy) dependencyProvider
-				.getDataGroupTermCollector();
+		extendedFunctionality = WorkOrderDeleterAsExtendedFunctionality.usingDeleter(recordDeleter);
+		termCollector = (DataGroupTermCollectorSpy) dependencyProvider.getDataGroupTermCollector();
 		authorizer = (AlwaysAuthorisedExceptStub) dependencyProvider.getSpiderAuthorizator();
 		authenticator = (AuthenticatorSpy) dependencyProvider.getAuthenticator();
 	}
 
 	@Test
 	public void testDeleteData() {
-		SpiderDataGroup workOrder = createWorkOrderUsingId("someGeneratedId");
+		DataGroup workOrder = createWorkOrderUsingId("someGeneratedId");
 
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 		assertEquals(recordDeleter.deletedTypes.size(), 1);
@@ -74,17 +76,18 @@ public class WorkOrderDeleterAsExtendedFunctionalityTest {
 		assertEquals(recordDeleter.deletedIds.get(0), "someGeneratedId");
 	}
 
-	private SpiderDataGroup createWorkOrderUsingId(String id) {
-		SpiderDataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(id, "book", "book1");
+	private DataGroup createWorkOrderUsingId(String id) {
+		DataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(id,
+				"book", "book1");
 		addTypeToRecordInfo(workOrder);
 		return workOrder;
 	}
 
-	private void addTypeToRecordInfo(SpiderDataGroup workOrder) {
-		SpiderDataGroup recordInfo = workOrder.extractGroup("recordInfo");
-		SpiderDataGroup type = SpiderDataGroup.withNameInData("type");
-		type.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
-		type.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "workOrder"));
+	private void addTypeToRecordInfo(DataGroup workOrder) {
+		DataGroup recordInfo = workOrder.getFirstGroupWithNameInData("recordInfo");
+		DataGroup type = DataGroup.withNameInData("type");
+		type.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
+		type.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "workOrder"));
 		recordInfo.addChild(type);
 	}
 
@@ -93,7 +96,7 @@ public class WorkOrderDeleterAsExtendedFunctionalityTest {
 		Set<String> actions = new HashSet<>();
 		actions.add("delete");
 
-		SpiderDataGroup workOrder = createWorkOrderUsingId("someGeneratedIdDeleteNotAllowed");
+		DataGroup workOrder = createWorkOrderUsingId("someGeneratedIdDeleteNotAllowed");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 		assertEquals(recordDeleter.deletedTypes.size(), 0);
 	}
@@ -103,11 +106,9 @@ public class WorkOrderDeleterAsExtendedFunctionalityTest {
 		Set<String> actions = new HashSet<>();
 		actions.add("delete");
 
-		SpiderDataGroup workOrder = createWorkOrderUsingId("nonExistingId");
+		DataGroup workOrder = createWorkOrderUsingId("nonExistingId");
 		extendedFunctionality.useExtendedFunctionality("someToken", workOrder);
 		assertEquals(recordDeleter.deletedTypes.size(), 0);
 	}
-
-
 
 }

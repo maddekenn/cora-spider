@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,8 +24,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.record.DataException;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.spy.RecordStorageCreateUpdateSpy;
@@ -35,13 +35,13 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 	private RecordStorage recordStorage;
 	private MetadataConsistencyValidator validator;
 	private String recordType;
-	private SpiderDataGroup recordAsSpiderDataGroup;
+	private DataGroup recordAsSpiderDataGroup;
 
 	@BeforeMethod
 	public void setUpDefaults() {
 		recordStorage = new RecordStorageCreateUpdateSpy();
 		recordType = "metadataGroup";
-		recordAsSpiderDataGroup = SpiderDataGroup.withNameInData("nameInData");
+		recordAsSpiderDataGroup = DataGroup.withNameInData("nameInData");
 	}
 
 	private void setUpDependencies() {
@@ -53,11 +53,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 	public void testMetadataGroupChildDoesNotExistInParent() {
 		recordStorage = new RecordStorageCreateUpdateSpy();
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithTwoChildren();
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testGroup"));
-		recordAsSpiderDataGroup
-				.addChild(refParentId);
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId", "testGroup"));
+		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
 		validator.validateRules(recordAsSpiderDataGroup);
 	}
@@ -66,9 +66,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 	public void testMetadataGroupChildWithDifferentIdButSameNameInDataExistInParent() {
 
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithTwoChildren();
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithTwoChildren"));
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(
+				DataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithTwoChildren"));
 		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
 		exceptNoException();
@@ -85,9 +87,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 	@Test
 	public void testMetadataGroupChildWithOneChild() {
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithOneChild();
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithOneChild"));
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(
+				DataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithOneChild"));
 
 		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
@@ -98,9 +102,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 	public void testMetadataGroupChildDoesNotExistInStorage() {
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithThreeChildren();
 
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithThreeChildren"));
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(
+				DataAtomic.withNameInDataAndValue("linkedRecordId", "testGroupWithThreeChildren"));
 
 		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
@@ -112,9 +118,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 		recordType = "metadataCollectionVariable";
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithCollectionVariableAsChild();
 
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testParentMissingItemCollectionVar"));
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId",
+				"testParentMissingItemCollectionVar"));
 
 		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
@@ -126,9 +134,11 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 		recordType = "metadataCollectionVariable";
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithCollectionVariableAsChild();
 
-		SpiderDataGroup refParentId = SpiderDataGroup.withNameInData("refParentId");
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
-		refParentId.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId", "testParentCollectionVar"));
+		DataGroup refParentId = DataGroup.withNameInData("refParentId");
+		refParentId
+				.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "metadataGroup"));
+		refParentId.addChild(
+				DataAtomic.withNameInDataAndValue("linkedRecordId", "testParentCollectionVar"));
 
 		recordAsSpiderDataGroup.addChild(refParentId);
 		setUpDependencies();
@@ -140,8 +150,7 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 		recordType = "metadataCollectionVariable";
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithCollectionVariableAsChild();
 
-		recordAsSpiderDataGroup
-				.addChild(SpiderDataAtomic.withNameInDataAndValue("finalValue", "that"));
+		recordAsSpiderDataGroup.addChild(DataAtomic.withNameInDataAndValue("finalValue", "that"));
 		setUpDependencies();
 		exceptNoException();
 	}
@@ -152,7 +161,7 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithCollectionVariableAsChild();
 
 		recordAsSpiderDataGroup
-				.addChild(SpiderDataAtomic.withNameInDataAndValue("finalValue", "doesNotExist"));
+				.addChild(DataAtomic.withNameInDataAndValue("finalValue", "doesNotExist"));
 		setUpDependencies();
 		validator.validateRules(recordAsSpiderDataGroup);
 	}
@@ -162,8 +171,8 @@ public class MetadataConsistencyGroupAndCollectionValidatorTest {
 		recordType = "metadataRecordLink";
 		recordAsSpiderDataGroup = DataCreator.createMetadataGroupWithRecordLinkAsChild();
 
-		recordAsSpiderDataGroup.addChild(
-				SpiderDataAtomic.withNameInDataAndValue("refParentId", "testParentRecordLink"));
+		recordAsSpiderDataGroup
+				.addChild(DataAtomic.withNameInDataAndValue("refParentId", "testParentRecordLink"));
 		setUpDependencies();
 		exceptNoException();
 	}

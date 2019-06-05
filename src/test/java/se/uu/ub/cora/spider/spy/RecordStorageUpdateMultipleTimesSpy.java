@@ -44,6 +44,7 @@ public class RecordStorageUpdateMultipleTimesSpy implements RecordStorage {
 	public List<DataGroup> filters = new ArrayList<>();
 	public boolean readListWasCalled = false;
 	public DataGroup recordToReturnOnRead = null;
+	public String idToReturn = null;
 
 	@Override
 	public DataGroup read(String type, String id) {
@@ -55,6 +56,27 @@ public class RecordStorageUpdateMultipleTimesSpy implements RecordStorage {
 					"false", "false", "false");
 		}
 		if (recordToReturnOnRead != null) {
+			// se.uu.ub.cora.json.builder.JsonBuilderFactory jsonBuilderFactory = new
+			// OrgJsonBuilderFactoryAdapter();
+			// DataGroupToJsonConverter converter = DataGroupToJsonConverter
+			// .usingJsonFactoryForDataGroup(jsonBuilderFactory, recordToReturnOnRead);
+			//
+			// String json = converter.toJson();
+			//
+			// JsonParser jsonParser = new OrgJsonParser();
+			// JsonValue jsonValue = jsonParser.parseString(json);
+			// JsonToDataConverterFactoryImp converterFactory = new JsonToDataConverterFactoryImp();
+			// JsonToDataGroupConverter toDataConverter = (JsonToDataGroupConverter)
+			// converterFactory
+			// .createForJsonObject(jsonValue);
+			//
+			// DataGroup dataGroupCopy = (DataGroup) toDataConverter.toInstance();
+
+			// DataGroup readDataGroup = DataGroup
+			// .withNameInData(recordToReturnOnRead.getNameInData());
+			// readDataGroup.addChild(recordToReturnOnRead.getFirstGroupWithNameInData("recordInfo"));
+
+			// return dataGroupCopy;
 			return recordToReturnOnRead;
 		}
 		DataGroup dataGroupToReturn = DataGroup.withNameInData("someNameInData");

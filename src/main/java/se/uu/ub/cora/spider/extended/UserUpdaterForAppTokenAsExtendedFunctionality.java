@@ -20,9 +20,8 @@
 package se.uu.ub.cora.spider.extended;
 
 import se.uu.ub.cora.beefeater.authentication.User;
+import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceProvider;
 import se.uu.ub.cora.spider.record.SpiderRecordUpdater;
@@ -44,11 +43,11 @@ public final class UserUpdaterForAppTokenAsExtendedFunctionality implements Exte
 	}
 
 	@Override
-	public void useExtendedFunctionality(String authToken, SpiderDataGroup appTokenDataGroup) {
-		SpiderDataGroup userAppTokenGroup = createUserAppTokenGroup(appTokenDataGroup);
+	public void useExtendedFunctionality(String authToken, DataGroup appTokenDataGroup) {
+		DataGroup userAppTokenGroup = createUserAppTokenGroup(appTokenDataGroup);
 
 		User user = getUserFromAuthToken(authToken);
-		SpiderDataGroup spiderUserDataGroup = readUserFromStorage(user);
+		DataGroup spiderUserDataGroup = readUserFromStorage(user);
 		spiderUserDataGroup.addChild(userAppTokenGroup);
 
 		updateUserInStorage(authToken, user, spiderUserDataGroup);
@@ -58,39 +57,38 @@ public final class UserUpdaterForAppTokenAsExtendedFunctionality implements Exte
 		return dependencyProvider.getAuthenticator().getUserForToken(authToken);
 	}
 
-	private SpiderDataGroup readUserFromStorage(User user) {
+	private DataGroup readUserFromStorage(User user) {
 		DataGroup userDataGroup = findUser(user.id);
-		return SpiderDataGroup.fromDataGroup(userDataGroup);
+		return userDataGroup;
 	}
 
 	private DataGroup findUser(String userId) {
 		return recordStorage.read("user", userId);
 	}
 
-	private SpiderDataGroup createUserAppTokenGroup(SpiderDataGroup appTokenDataGroup) {
-		SpiderDataGroup userAppTokenGroup = SpiderDataGroup.withNameInData("userAppTokenGroup");
-		SpiderDataGroup appTokenLink = createAppTokenLink(appTokenDataGroup);
+	private DataGroup createUserAppTokenGroup(DataGroup appTokenDataGroup) {
+		DataGroup userAppTokenGroup = DataGroup.withNameInData("userAppTokenGroup");
+		DataGroup appTokenLink = createAppTokenLink(appTokenDataGroup);
 		userAppTokenGroup.addChild(appTokenLink);
-		userAppTokenGroup.addChild(SpiderDataAtomic.withNameInDataAndValue("note",
-				appTokenDataGroup.extractAtomicValue("note")));
+		userAppTokenGroup.addChild(DataAtomic.withNameInDataAndValue("note",
+				appTokenDataGroup.getFirstAtomicValueWithNameInData("note")));
 		userAppTokenGroup.setRepeatId(String.valueOf(System.nanoTime()));
 		return userAppTokenGroup;
 	}
 
-	private SpiderDataGroup createAppTokenLink(SpiderDataGroup appTokenDataGroup) {
-		SpiderDataGroup appTokenLink = SpiderDataGroup.withNameInData("appTokenLink");
-		appTokenLink
-				.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordType", "appToken"));
-		appTokenLink.addChild(SpiderDataAtomic.withNameInDataAndValue("linkedRecordId",
-				appTokenDataGroup.extractGroup("recordInfo").extractAtomicValue("id")));
+	private DataGroup createAppTokenLink(DataGroup appTokenDataGroup) {
+		DataGroup appTokenLink = DataGroup.withNameInData("appTokenLink");
+		appTokenLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordType", "appToken"));
+		appTokenLink.addChild(DataAtomic.withNameInDataAndValue("linkedRecordId",
+				appTokenDataGroup.getFirstGroupWithNameInData("recordInfo")
+						.getFirstAtomicValueWithNameInData("id")));
 		return appTokenLink;
 	}
 
-	private void updateUserInStorage(String authToken, User user,
-			SpiderDataGroup spiderUserDataGroup) {
-		SpiderDataGroup recordInfo = spiderUserDataGroup.extractGroup("recordInfo");
-		SpiderDataGroup type = recordInfo.extractGroup("type");
-		String recordType = type.extractAtomicValue("linkedRecordId");
+	private void updateUserInStorage(String authToken, User user, DataGroup spiderUserDataGroup) {
+		DataGroup recordInfo = spiderUserDataGroup.getFirstGroupWithNameInData("recordInfo");
+		DataGroup type = recordInfo.getFirstGroupWithNameInData("type");
+		String recordType = type.getFirstAtomicValueWithNameInData("linkedRecordId");
 
 		SpiderRecordUpdater spiderRecordUpdater = SpiderInstanceProvider.getSpiderRecordUpdater();
 		spiderRecordUpdater.updateRecord(authToken, recordType, user.id, spiderUserDataGroup);

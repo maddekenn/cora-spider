@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,14 +21,14 @@ package se.uu.ub.cora.spider.extended;
 
 import java.util.UUID;
 
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
+import se.uu.ub.cora.data.DataAtomic;
+import se.uu.ub.cora.data.DataGroup;
 
 public class AppTokenEnhancerAsExtendedFunctionality implements ExtendedFunctionality {
 
 	@Override
-	public void useExtendedFunctionality(String authToken, SpiderDataGroup spiderDataGroup) {
-		SpiderDataAtomic token = SpiderDataAtomic.withNameInDataAndValue("token", generateToken());
+	public void useExtendedFunctionality(String authToken, DataGroup spiderDataGroup) {
+		DataAtomic token = DataAtomic.withNameInDataAndValue("token", generateToken());
 		spiderDataGroup.addChild(token);
 	}
 

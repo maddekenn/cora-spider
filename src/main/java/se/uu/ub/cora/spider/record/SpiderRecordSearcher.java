@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,11 +18,11 @@
  */
 package se.uu.ub.cora.spider.record;
 
+import se.uu.ub.cora.data.DataList;
 import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataList;
 
 public interface SpiderRecordSearcher {
 
-	SpiderDataList search(String authToken, String searchId, SpiderDataGroup searchData);
+	DataList search(String authToken, String searchId, SpiderDataGroup searchData);
 
 }

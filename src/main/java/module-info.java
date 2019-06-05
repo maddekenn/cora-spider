@@ -1,6 +1,8 @@
 module se.uu.ub.cora.spider {
 	requires transitive se.uu.ub.cora.beefeater;
 	requires transitive se.uu.ub.cora.bookkeeper;
+	requires se.uu.ub.cora.json;
+	requires se.uu.ub.cora.data;
 
 	exports se.uu.ub.cora.spider.authentication;
 	exports se.uu.ub.cora.spider.authorization;

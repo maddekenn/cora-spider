@@ -27,7 +27,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
+import se.uu.ub.cora.data.Action;
+import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataList;
+import se.uu.ub.cora.data.DataRecordLink;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
@@ -35,11 +39,6 @@ import se.uu.ub.cora.spider.authorization.AuthorizationException;
 import se.uu.ub.cora.spider.authorization.NeverAuthorisedStub;
 import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
-import se.uu.ub.cora.spider.data.Action;
-import se.uu.ub.cora.spider.data.SpiderDataAtomic;
-import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderDataList;
-import se.uu.ub.cora.spider.data.SpiderDataRecordLink;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.record.storage.RecordStorage;
 import se.uu.ub.cora.spider.spy.AuthorizatorAlwaysAuthorizedSpy;
@@ -83,32 +82,29 @@ public class SpiderRecordIncomingLinksReaderTest {
 
 	@Test
 	public void testReadIncomingLinks() {
-		SpiderDataList linksPointingToRecord = incomingLinksReader
-				.readIncomingLinks("someToken78678567", "place", "place:0001");
+		DataList linksPointingToRecord = incomingLinksReader.readIncomingLinks("someToken78678567",
+				"place", "place:0001");
 		assertEquals(linksPointingToRecord.getTotalNumberOfTypeInStorage(), "1");
 		assertEquals(linksPointingToRecord.getFromNo(), "1");
 		assertEquals(linksPointingToRecord.getToNo(), "1");
 
-		SpiderDataGroup link = (SpiderDataGroup) linksPointingToRecord.getDataList().iterator()
-				.next();
+		DataGroup link = (DataGroup) linksPointingToRecord.getDataList().iterator().next();
 		assertEquals(link.getNameInData(), "recordToRecordLink");
 
-		SpiderDataRecordLink from = (SpiderDataRecordLink) link.getFirstChildWithNameInData("from");
-		SpiderDataAtomic linkedRecordType = (SpiderDataAtomic) from
+		DataRecordLink from = (DataRecordLink) link.getFirstChildWithNameInData("from");
+		DataAtomic linkedRecordType = (DataAtomic) from
 				.getFirstChildWithNameInData("linkedRecordType");
-		SpiderDataAtomic linkedRecordId = (SpiderDataAtomic) from
-				.getFirstChildWithNameInData("linkedRecordId");
+		DataAtomic linkedRecordId = (DataAtomic) from.getFirstChildWithNameInData("linkedRecordId");
 
 		assertEquals(linkedRecordType.getValue(), "place");
 		assertEquals(linkedRecordId.getValue(), "place:0002");
 		assertEquals(from.getActions().size(), 1);
 		assertTrue(from.getActions().contains(Action.READ));
 
-		SpiderDataRecordLink to = (SpiderDataRecordLink) link.getFirstChildWithNameInData("to");
-		SpiderDataAtomic toLinkedRecordType = (SpiderDataAtomic) to
+		DataRecordLink to = (DataRecordLink) link.getFirstChildWithNameInData("to");
+		DataAtomic toLinkedRecordType = (DataAtomic) to
 				.getFirstChildWithNameInData("linkedRecordType");
-		SpiderDataAtomic toLinkedRecordId = (SpiderDataAtomic) to
-				.getFirstChildWithNameInData("linkedRecordId");
+		DataAtomic toLinkedRecordId = (DataAtomic) to.getFirstChildWithNameInData("linkedRecordId");
 
 		assertEquals(toLinkedRecordType.getValue(), "place");
 		assertEquals(toLinkedRecordId.getValue(), "place:0001");
@@ -131,32 +127,29 @@ public class SpiderRecordIncomingLinksReaderTest {
 
 	@Test
 	public void testReadIncomingLinksWhenLinkPointsToParentRecordType() {
-		SpiderDataList linksPointingToRecord = incomingLinksReader
-				.readIncomingLinks("someToken78678567", "place", "place:0003");
+		DataList linksPointingToRecord = incomingLinksReader.readIncomingLinks("someToken78678567",
+				"place", "place:0003");
 		assertEquals(linksPointingToRecord.getTotalNumberOfTypeInStorage(), "1");
 		assertEquals(linksPointingToRecord.getFromNo(), "1");
 		assertEquals(linksPointingToRecord.getToNo(), "1");
 
-		SpiderDataGroup link = (SpiderDataGroup) linksPointingToRecord.getDataList().iterator()
-				.next();
+		DataGroup link = (DataGroup) linksPointingToRecord.getDataList().iterator().next();
 		assertEquals(link.getNameInData(), "recordToRecordLink");
 
-		SpiderDataRecordLink from = (SpiderDataRecordLink) link.getFirstChildWithNameInData("from");
-		SpiderDataAtomic linkedRecordType = (SpiderDataAtomic) from
+		DataRecordLink from = (DataRecordLink) link.getFirstChildWithNameInData("from");
+		DataAtomic linkedRecordType = (DataAtomic) from
 				.getFirstChildWithNameInData("linkedRecordType");
-		SpiderDataAtomic linkedRecordId = (SpiderDataAtomic) from
-				.getFirstChildWithNameInData("linkedRecordId");
+		DataAtomic linkedRecordId = (DataAtomic) from.getFirstChildWithNameInData("linkedRecordId");
 
 		assertEquals(linkedRecordType.getValue(), "place");
 		assertEquals(linkedRecordId.getValue(), "place:0004");
 		assertEquals(from.getActions().size(), 1);
 		assertTrue(from.getActions().contains(Action.READ));
 
-		SpiderDataRecordLink to = (SpiderDataRecordLink) link.getFirstChildWithNameInData("to");
-		SpiderDataAtomic toLinkedRecordType = (SpiderDataAtomic) to
+		DataRecordLink to = (DataRecordLink) link.getFirstChildWithNameInData("to");
+		DataAtomic toLinkedRecordType = (DataAtomic) to
 				.getFirstChildWithNameInData("linkedRecordType");
-		SpiderDataAtomic toLinkedRecordId = (SpiderDataAtomic) to
-				.getFirstChildWithNameInData("linkedRecordId");
+		DataAtomic toLinkedRecordId = (DataAtomic) to.getFirstChildWithNameInData("linkedRecordId");
 
 		assertEquals(toLinkedRecordType.getValue(), "authority");
 		assertEquals(toLinkedRecordId.getValue(), "place:0003");
@@ -165,8 +158,8 @@ public class SpiderRecordIncomingLinksReaderTest {
 
 	@Test
 	public void testReadIncomingLinksNoParentRecordTypeNoLinks() {
-		SpiderDataList linksPointingToRecord = incomingLinksReader
-				.readIncomingLinks("someToken78678567", "search", "aSearchId");
+		DataList linksPointingToRecord = incomingLinksReader.readIncomingLinks("someToken78678567",
+				"search", "aSearchId");
 		assertEquals(linksPointingToRecord.getTotalNumberOfTypeInStorage(), "0");
 		assertEquals(linksPointingToRecord.getFromNo(), "1");
 		assertEquals(linksPointingToRecord.getToNo(), "0");

@@ -33,6 +33,7 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
+import se.uu.ub.cora.spider.dependency.RecordStorageProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
 import se.uu.ub.cora.spider.spy.RecordIndexerSpy;
@@ -54,7 +55,9 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 		dependencyProvider = new SpiderDependencyProviderSpy(new HashMap<>());
 		dependencyProvider.recordIndexer = new RecordIndexerSpy();
 		dependencyProvider.searchTermCollector = new DataGroupTermCollectorSpy();
-		dependencyProvider.recordStorage = new RecordStorageSpy();
+		RecordStorageProviderSpy recordStorageProviderSpy = new RecordStorageProviderSpy();
+		recordStorageProviderSpy.recordStorage = new RecordStorageSpy();
+		dependencyProvider.setRecordStorageProvider(recordStorageProviderSpy);
 		dependencyProvider.authenticator = new AuthenticatorSpy();
 		dependencyProvider.spiderAuthorizator = new AlwaysAuthorisedExceptStub();
 		setUpDependencyProvider();
@@ -93,7 +96,9 @@ public class WorkOrderExecutorAsExtendedFunctionalityTest {
 
 	@Test
 	public void testIndexDataForChildOfAbstract() {
-		dependencyProvider.recordStorage = new RecordStorageCreateUpdateSpy();
+		RecordStorageProviderSpy recordStorageProviderSpy = new RecordStorageProviderSpy();
+		recordStorageProviderSpy.recordStorage = new RecordStorageCreateUpdateSpy();
+		dependencyProvider.setRecordStorageProvider(recordStorageProviderSpy);
 		setUpDependencyProvider();
 		DataGroup workOrder = DataCreator.createWorkOrderWithIdAndRecordTypeAndRecordIdToIndex(
 				"someGeneratedId", "image", "image1");

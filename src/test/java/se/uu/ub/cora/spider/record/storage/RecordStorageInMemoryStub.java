@@ -31,7 +31,8 @@ import se.uu.ub.cora.bookkeeper.storage.MetadataStorage;
 import se.uu.ub.cora.data.DataElement;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.spider.data.SpiderDataGroup;
-import se.uu.ub.cora.spider.data.SpiderReadResult;
+import se.uu.ub.cora.storage.RecordStorage;
+import se.uu.ub.cora.storage.SpiderReadResult;
 
 public class RecordStorageInMemoryStub implements RecordStorage, MetadataStorage {
 	private DataGroup emptyFilter = DataGroup.withNameInData("filter");

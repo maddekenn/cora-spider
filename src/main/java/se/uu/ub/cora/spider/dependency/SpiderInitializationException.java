@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,11 +16,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.spider.dependency;
 
-package se.uu.ub.cora.spider.record.storage;
+public class SpiderInitializationException extends RuntimeException {
 
-public interface RecordIdGenerator {
+	private static final long serialVersionUID = 1106993019564065759L;
 
-	String getIdForType(String type);
+	public SpiderInitializationException(String message) {
+		super(message);
+	}
 
 }

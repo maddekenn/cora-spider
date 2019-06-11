@@ -3,6 +3,8 @@ module se.uu.ub.cora.spider {
 	requires transitive se.uu.ub.cora.bookkeeper;
 	requires se.uu.ub.cora.json;
 	requires se.uu.ub.cora.data;
+	requires transitive se.uu.ub.cora.storage;
+	requires se.uu.ub.cora.logger;
 
 	exports se.uu.ub.cora.spider.authentication;
 	exports se.uu.ub.cora.spider.authorization;
@@ -14,5 +16,4 @@ module se.uu.ub.cora.spider {
 	exports se.uu.ub.cora.spider.record.storage;
 	exports se.uu.ub.cora.spider.role;
 	exports se.uu.ub.cora.spider.search;
-	exports se.uu.ub.cora.spider.stream.storage;
 }

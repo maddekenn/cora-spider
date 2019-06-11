@@ -35,8 +35,8 @@ import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionality;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProvider;
-import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
 import se.uu.ub.cora.spider.search.RecordIndexer;
+import se.uu.ub.cora.storage.RecordIdGenerator;
 
 public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 		implements SpiderRecordCreator {
@@ -63,7 +63,7 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 		this.spiderAuthorizator = dependencyProvider.getSpiderAuthorizator();
 		this.dataValidator = dependencyProvider.getDataValidator();
 		this.recordStorage = dependencyProvider.getRecordStorage();
-		this.idGenerator = dependencyProvider.getIdGenerator();
+		this.idGenerator = dependencyProvider.getRecordIdGenerator();
 		this.linkCollector = dependencyProvider.getDataRecordLinkCollector();
 		this.collectTermCollector = dependencyProvider.getDataGroupTermCollector();
 		this.recordIndexer = dependencyProvider.getRecordIndexer();

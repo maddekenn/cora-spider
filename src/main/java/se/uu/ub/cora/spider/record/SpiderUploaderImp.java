@@ -29,8 +29,8 @@ import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.data.DataMissingException;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProvider;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceProvider;
-import se.uu.ub.cora.spider.record.storage.RecordIdGenerator;
-import se.uu.ub.cora.spider.stream.storage.StreamStorage;
+import se.uu.ub.cora.storage.RecordIdGenerator;
+import se.uu.ub.cora.storage.StreamStorage;
 
 public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploader {
 	private static final String RESOURCE_INFO = "resourceInfo";
@@ -45,7 +45,7 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 		authenticator = dependencyProvider.getAuthenticator();
 		spiderAuthorizator = dependencyProvider.getSpiderAuthorizator();
 		recordStorage = dependencyProvider.getRecordStorage();
-		idGenerator = dependencyProvider.getIdGenerator();
+		idGenerator = dependencyProvider.getRecordIdGenerator();
 		streamStorage = dependencyProvider.getStreamStorage();
 		collectTermCollector = dependencyProvider.getDataGroupTermCollector();
 	}

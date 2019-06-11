@@ -21,7 +21,7 @@ package se.uu.ub.cora.spider.record;
 import java.util.List;
 
 import se.uu.ub.cora.data.DataGroup;
-import se.uu.ub.cora.spider.data.SpiderReadResult;
+import se.uu.ub.cora.storage.SpiderReadResult;
 
 public interface RecordSearch {
 

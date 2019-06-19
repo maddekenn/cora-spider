@@ -66,7 +66,6 @@ public class DataGroupToRecordEnhancerImp implements DataGroupToRecordEnhancer {
 		this.recordType = recordType;
 		this.dataGroup = dataGroup;
 		collectedTerms = getCollectedTermsForRecord(recordType, dataGroup);
-		// SpiderDataGroup spiderDataGroup = SpiderDataGroup.fromDataGroup(dataGroup);
 		DataGroupEnhancer dataGroupEnhancer = new DataGroupEnhancer();
 		DataGroup enhancedDataGroup = dataGroupEnhancer.enhance(dataGroup);
 		record = DataRecord.withDataGroup(enhancedDataGroup);

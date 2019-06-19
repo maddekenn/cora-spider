@@ -106,7 +106,6 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 		ensureCompleteRecordInfo(user.id, recordType);
 		recordId = extractIdFromData();
 
-		// DataGroup topLevelDataGroup = recordAsSpiderDataGroup.toDataGroup();
 		DataGroup topLevelDataGroup = recordAsSpiderDataGroup;
 
 		DataGroup collectedTerms = collectTermCollector.collectTerms(metadataId, topLevelDataGroup);
@@ -120,8 +119,6 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 		List<String> ids = recordTypeHandler.createListOfPossibleIdsToThisRecord(recordId);
 		recordIndexer.indexData(ids, collectedTerms, topLevelDataGroup);
 
-		// SpiderDataGroup spiderDataGroupWithActions = SpiderDataGroup
-		// .fromDataGroup(topLevelDataGroup);
 		DataGroup spiderDataGroupWithActions = topLevelDataGroup;
 		useExtendedFunctionalityBeforeReturn(recordType, spiderDataGroupWithActions);
 

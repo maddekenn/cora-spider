@@ -103,7 +103,6 @@ public class RecordStorageInMemoryStub implements RecordStorage, MetadataStorage
 		DataGroupEnhancer dataGroupEnhancer = new DataGroupEnhancer();
 		dataGroupEnhancer.enhance(record);
 		return copyDataGroup(record);
-		// return SpiderDataGroup.fromDataGroup(record).toDataGroup();
 	}
 
 	private DataGroup copyDataGroup(DataGroup record) {

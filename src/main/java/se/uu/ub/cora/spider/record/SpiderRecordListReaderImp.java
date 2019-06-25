@@ -177,10 +177,10 @@ public final class SpiderRecordListReaderImp extends SpiderRecordHandler
 
 	private void enhanceDataGroupAndAddToRecordList(DataGroup dataGroup,
 			String recordTypeForRecord) {
-		DataRecord spiderDataRecord = dataGroupToRecordEnhancer.enhance(user, recordTypeForRecord,
+		DataRecord dataRecord = dataGroupToRecordEnhancer.enhance(user, recordTypeForRecord,
 				dataGroup);
-		if (spiderDataRecord.getActions().contains(Action.READ)) {
-			readRecordList.addData(spiderDataRecord);
+		if (dataRecord.getActions().contains(Action.READ)) {
+			readRecordList.addData(dataRecord);
 		}
 	}
 

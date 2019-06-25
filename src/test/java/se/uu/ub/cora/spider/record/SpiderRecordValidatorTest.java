@@ -36,6 +36,7 @@ import se.uu.ub.cora.data.Action;
 import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecord;
+import se.uu.ub.cora.logger.LoggerProvider;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
@@ -46,6 +47,7 @@ import se.uu.ub.cora.spider.dependency.RecordIdGeneratorProviderSpy;
 import se.uu.ub.cora.spider.dependency.RecordStorageProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProviderSpy;
+import se.uu.ub.cora.spider.log.LoggerFactorySpy;
 import se.uu.ub.cora.spider.search.RecordIndexer;
 import se.uu.ub.cora.spider.spy.AuthorizatorAlwaysAuthorizedSpy;
 import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
@@ -77,9 +79,13 @@ public class SpiderRecordValidatorTest {
 	private DataGroupTermCollector termCollector;
 	private RecordIndexer recordIndexer;
 	private RecordIdGenerator idGenerator;
+	private LoggerFactorySpy loggerFactorySpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
+		loggerFactorySpy = new LoggerFactorySpy();
+		LoggerProvider.setLoggerFactory(loggerFactorySpy);
+
 		authenticator = new AuthenticatorSpy();
 		spiderAuthorizator = new AuthorizatorAlwaysAuthorizedSpy();
 		dataValidator = new DataValidatorAlwaysValidSpy();
@@ -162,14 +168,14 @@ public class SpiderRecordValidatorTest {
 		ruleCalculator = new RuleCalculatorSpy();
 		setUpDependencyProvider();
 
-		DataGroup spiderDataGroup = DataGroup.withNameInData("nameInData");
-		spiderDataGroup.addChild(
+		DataGroup dataGroup = DataGroup.withNameInData("nameInData");
+		dataGroup.addChild(
 				SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider("spyType",
 						"spyId", "cora"));
 		DataGroup validationOrder = createValidationOrderWithMetadataToValidateAndValidateLinks(
 				"existing", "true");
 		recordValidator.validateRecord("someToken78678567", "validationOrder", validationOrder,
-				spiderDataGroup);
+				dataGroup);
 
 		AuthorizatorAlwaysAuthorizedSpy authorizatorSpy = (AuthorizatorAlwaysAuthorizedSpy) spiderAuthorizator;
 		assertTrue(authorizatorSpy.authorizedWasCalled);
@@ -188,14 +194,14 @@ public class SpiderRecordValidatorTest {
 		ruleCalculator = new RuleCalculatorSpy();
 		setUpDependencyProvider();
 
-		DataGroup spiderDataGroup = DataGroup.withNameInData("nameInData");
-		spiderDataGroup.addChild(
+		DataGroup dataGroup = DataGroup.withNameInData("nameInData");
+		dataGroup.addChild(
 				SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider("spyType",
 						"spyId", "cora"));
 		DataGroup validationOrder = createValidationOrderWithMetadataToValidateAndValidateLinks(
 				"existing", "false");
 		recordValidator.validateRecord("someToken78678567", "validationOrder", validationOrder,
-				spiderDataGroup);
+				dataGroup);
 
 		assertFalse(((DataRecordLinkCollectorSpy) linkCollector).collectLinksWasCalled);
 	}
@@ -420,13 +426,13 @@ public class SpiderRecordValidatorTest {
 				.add("validationOrderNew");
 		setUpDependencyProvider();
 
-		DataGroup spiderDataGroup = createDataGroupPlace();
+		DataGroup dataGroup = createDataGroupPlace();
 		DataGroup validationOrder = createValidationOrderWithMetadataToValidateAndValidateLinks(
 				"existing", "true");
 		boolean exceptionWasCaught = false;
 		try {
 			recordValidator.validateRecord("someToken78678567", "validationOrder", validationOrder,
-					spiderDataGroup);
+					dataGroup);
 		} catch (Exception e) {
 			assertEquals(e.getClass(), DataException.class);
 			assertEquals(e.getMessage(),
@@ -446,8 +452,8 @@ public class SpiderRecordValidatorTest {
 				.put("spyType", hashSet);
 		setUpDependencyProvider();
 
-		DataGroup spiderDataGroup = DataGroup.withNameInData("nameInData");
-		spiderDataGroup.addChild(
+		DataGroup dataGroup = DataGroup.withNameInData("nameInData");
+		dataGroup.addChild(
 				SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider("spyType",
 						"spyId", "cora"));
 		DataGroup validationOrder = createValidationOrderWithMetadataToValidateAndValidateLinks(
@@ -456,7 +462,7 @@ public class SpiderRecordValidatorTest {
 		boolean exceptionWasCaught = false;
 		try {
 			recordValidator.validateRecord("someToken78678567", "validationOrder", validationOrder,
-					spiderDataGroup);
+					dataGroup);
 		} catch (Exception e) {
 			assertEquals(e.getClass(), AuthorizationException.class);
 			exceptionWasCaught = true;

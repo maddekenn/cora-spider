@@ -54,8 +54,8 @@ public class WorkOrderExecutorAsExtendedFunctionality implements ExtendedFunctio
 	}
 
 	@Override
-	public void useExtendedFunctionality(String authToken, DataGroup spiderDataGroup) {
-		DataGroup workOrder = spiderDataGroup;
+	public void useExtendedFunctionality(String authToken, DataGroup dataGroup) {
+		DataGroup workOrder = dataGroup;
 		recordTypeToIndex = getRecordTypeToIndexFromWorkOrder(workOrder);
 		recordIdToIndex = getRecordIdToIndexFromWorkOrder(workOrder);
 		indexDataIfUserIsAuthorized(authToken);

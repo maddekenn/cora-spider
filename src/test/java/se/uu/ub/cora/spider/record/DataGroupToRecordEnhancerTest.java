@@ -40,6 +40,7 @@ import se.uu.ub.cora.data.Action;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecord;
 import se.uu.ub.cora.data.DataRecordLink;
+import se.uu.ub.cora.logger.LoggerProvider;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
 import se.uu.ub.cora.spider.authorization.AlwaysAuthorisedExceptStub;
@@ -48,6 +49,7 @@ import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.dependency.RecordStorageProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
+import se.uu.ub.cora.spider.log.LoggerFactorySpy;
 import se.uu.ub.cora.spider.spy.AuthorizatorAlwaysAuthorizedSpy;
 import se.uu.ub.cora.spider.spy.DataGroupTermCollectorSpy;
 import se.uu.ub.cora.spider.spy.NoRulesCalculatorStub;
@@ -61,9 +63,12 @@ public class DataGroupToRecordEnhancerTest {
 	private User user;
 	private DataGroupToRecordEnhancer enhancer;
 	private DataGroupTermCollector termCollector;
+	private LoggerFactorySpy loggerFactorySpy;
 
 	@BeforeMethod
 	public void setUp() {
+		loggerFactorySpy = new LoggerFactorySpy();
+		LoggerProvider.setLoggerFactory(loggerFactorySpy);
 		user = new User("987654321");
 		recordStorage = new RecordEnhancerTestsRecordStorage();
 		authenticator = new AuthenticatorSpy();
@@ -394,10 +399,10 @@ public class DataGroupToRecordEnhancerTest {
 		String recordType = "dataWithLinks";
 		DataRecord record = enhancer.enhance(user, recordType, dataGroup);
 
-		DataGroup spiderDataGroup = record.getDataGroup();
-		DataGroup spiderDataGroupOneLevelDown = (DataGroup) spiderDataGroup
+		DataGroup recordAsDataGroup = record.getDataGroup();
+		DataGroup dataGroupOneLevelDown = (DataGroup) recordAsDataGroup
 				.getFirstChildWithNameInData("oneLevelDownTargetDoesNotExist");
-		DataRecordLink link = (DataRecordLink) spiderDataGroupOneLevelDown
+		DataRecordLink link = (DataRecordLink) dataGroupOneLevelDown
 				.getFirstChildWithNameInData("link");
 		assertFalse(link.getActions().contains(Action.READ));
 		assertEquals(link.getActions().size(), 0);

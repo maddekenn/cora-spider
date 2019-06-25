@@ -35,7 +35,7 @@ public class SpiderRecordHandler {
 	protected RecordStorage recordStorage;
 	protected String recordType;
 	protected String recordId;
-	protected DataGroup recordAsSpiderDataGroup;
+	protected DataGroup recordAsDataGroup;
 
 	protected DataGroup getRecordTypeDefinition() {
 		return recordStorage.read(RECORD_TYPE, recordType);
@@ -71,8 +71,8 @@ public class SpiderRecordHandler {
 		}
 	}
 
-	protected String extractDataDividerFromData(DataGroup spiderDataGroup) {
-		DataGroup recordInfo = spiderDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+	protected String extractDataDividerFromData(DataGroup dataGroup) {
+		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		DataGroup dataDivider = recordInfo.getFirstGroupWithNameInData("dataDivider");
 		return dataDivider.getFirstAtomicValueWithNameInData(LINKED_RECORD_ID);
 	}

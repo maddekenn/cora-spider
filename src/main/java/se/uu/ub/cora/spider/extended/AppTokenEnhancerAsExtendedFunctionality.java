@@ -27,9 +27,9 @@ import se.uu.ub.cora.data.DataGroup;
 public class AppTokenEnhancerAsExtendedFunctionality implements ExtendedFunctionality {
 
 	@Override
-	public void useExtendedFunctionality(String authToken, DataGroup spiderDataGroup) {
+	public void useExtendedFunctionality(String authToken, DataGroup dataGroup) {
 		DataAtomic token = DataAtomic.withNameInDataAndValue("token", generateToken());
-		spiderDataGroup.addChild(token);
+		dataGroup.addChild(token);
 	}
 
 	private String generateToken() {

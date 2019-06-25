@@ -66,7 +66,6 @@ public final class SpiderUploaderImp extends SpiderBinary implements SpiderUploa
 		checkRecordTypeIsChildOfBinary();
 
 		DataGroup recordRead = recordStorage.read(type, id);
-		// spiderRecordRead = SpiderDataGroup.fromDataGroup(recordRead);
 		spiderRecordRead = recordRead;
 		checkUserIsAuthorisedToUploadData(recordRead);
 		checkStreamIsPresent(stream);

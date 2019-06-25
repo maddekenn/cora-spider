@@ -42,11 +42,11 @@ public class DataGroupToRecordEnhancerSpy implements DataGroupToRecordEnhancer {
 		this.recordType = recordType;
 		this.dataGroup = dataGroup;
 
-		DataRecord spiderDataGroup = DataRecord.withDataGroup(dataGroup);
+		DataRecord dataRecord = DataRecord.withDataGroup(dataGroup);
 		if (addReadAction) {
-			spiderDataGroup.addAction(Action.READ);
+			dataRecord.addAction(Action.READ);
 		}
-		return spiderDataGroup;
+		return dataRecord;
 	}
 
 }

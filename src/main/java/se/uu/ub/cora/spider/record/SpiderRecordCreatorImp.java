@@ -78,10 +78,10 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 
 	@Override
 	public DataRecord createAndStoreRecord(String authToken, String recordTypeToCreate,
-			DataGroup spiderDataGroup) {
+			DataGroup dataGroup) {
 		this.authToken = authToken;
 		this.recordType = recordTypeToCreate;
-		this.recordAsSpiderDataGroup = spiderDataGroup;
+		this.recordAsDataGroup = dataGroup;
 
 		return validateCreateAndStoreRecord();
 
@@ -97,16 +97,16 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 
 		checkNoCreateForAbstractRecordType();
 
-		useExtendedFunctionalityBeforeMetadataValidation(recordType, recordAsSpiderDataGroup);
+		useExtendedFunctionalityBeforeMetadataValidation(recordType, recordAsDataGroup);
 
 		validateDataInRecordAsSpecifiedInMetadata();
 
-		useExtendedFunctionalityAfterMetadataValidation(recordType, recordAsSpiderDataGroup);
+		useExtendedFunctionalityAfterMetadataValidation(recordType, recordAsDataGroup);
 
 		ensureCompleteRecordInfo(user.id, recordType);
 		recordId = extractIdFromData();
 
-		DataGroup topLevelDataGroup = recordAsSpiderDataGroup;
+		DataGroup topLevelDataGroup = recordAsDataGroup;
 
 		DataGroup collectedTerms = collectTermCollector.collectTerms(metadataId, topLevelDataGroup);
 		checkUserIsAuthorisedToCreateIncomingData(recordType, collectedTerms);
@@ -119,8 +119,8 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 		List<String> ids = recordTypeHandler.createListOfPossibleIdsToThisRecord(recordId);
 		recordIndexer.indexData(ids, collectedTerms, topLevelDataGroup);
 
-		DataGroup spiderDataGroupWithActions = topLevelDataGroup;
-		useExtendedFunctionalityBeforeReturn(recordType, spiderDataGroupWithActions);
+		DataGroup dataGroupWithActions = topLevelDataGroup;
+		useExtendedFunctionalityBeforeReturn(recordType, dataGroupWithActions);
 
 		return dataGroupToRecordEnhancer.enhance(user, recordType, topLevelDataGroup);
 	}
@@ -135,7 +135,7 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 
 	private void createRecordInStorage(DataGroup topLevelDataGroup, DataGroup collectedLinks,
 			DataGroup collectedTerms) {
-		String dataDivider = extractDataDividerFromData(recordAsSpiderDataGroup);
+		String dataDivider = extractDataDividerFromData(recordAsDataGroup);
 		recordStorage.create(recordType, recordId, topLevelDataGroup, collectedTerms,
 				collectedLinks, dataDivider);
 	}
@@ -148,13 +148,12 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 	}
 
 	private String extractIdFromData() {
-		return recordAsSpiderDataGroup.getFirstGroupWithNameInData("recordInfo")
+		return recordAsDataGroup.getFirstGroupWithNameInData("recordInfo")
 				.getFirstAtomicValueWithNameInData("id");
 	}
 
 	private void validateDataInRecordAsSpecifiedInMetadata() {
-		// DataGroup record = recordAsSpiderDataGroup.toDataGroup();
-		DataGroup record = recordAsSpiderDataGroup;
+		DataGroup record = recordAsDataGroup;
 
 		ValidationAnswer validationAnswer = dataValidator.validateData(metadataId, record);
 		if (validationAnswer.dataIsInvalid()) {
@@ -163,36 +162,36 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 	}
 
 	private void useExtendedFunctionalityBeforeMetadataValidation(String recordTypeToCreate,
-			DataGroup spiderDataGroup) {
+			DataGroup dataGroup) {
 		List<ExtendedFunctionality> functionalityForCreateBeforeMetadataValidation = extendedFunctionalityProvider
 				.getFunctionalityForCreateBeforeMetadataValidation(recordTypeToCreate);
-		useExtendedFunctionality(spiderDataGroup, functionalityForCreateBeforeMetadataValidation);
+		useExtendedFunctionality(dataGroup, functionalityForCreateBeforeMetadataValidation);
 	}
 
-	private void useExtendedFunctionality(DataGroup spiderDataGroup,
+	private void useExtendedFunctionality(DataGroup dataGroup,
 			List<ExtendedFunctionality> functionalityForCreateAfterMetadataValidation) {
 		for (ExtendedFunctionality extendedFunctionality : functionalityForCreateAfterMetadataValidation) {
-			extendedFunctionality.useExtendedFunctionality(authToken, spiderDataGroup);
+			extendedFunctionality.useExtendedFunctionality(authToken, dataGroup);
 		}
 	}
 
 	private void useExtendedFunctionalityAfterMetadataValidation(String recordTypeToCreate,
-			DataGroup spiderDataGroup) {
+			DataGroup dataGroup) {
 		List<ExtendedFunctionality> functionalityForCreateAfterMetadataValidation = extendedFunctionalityProvider
 				.getFunctionalityForCreateAfterMetadataValidation(recordTypeToCreate);
-		useExtendedFunctionality(spiderDataGroup, functionalityForCreateAfterMetadataValidation);
+		useExtendedFunctionality(dataGroup, functionalityForCreateAfterMetadataValidation);
 	}
 
 	private void useExtendedFunctionalityBeforeReturn(String recordTypeToCreate,
-			DataGroup spiderDataGroup) {
+			DataGroup dataGroup) {
 		List<ExtendedFunctionality> extendedFunctionalityList = extendedFunctionalityProvider
 				.getFunctionalityForCreateBeforeReturn(recordTypeToCreate);
-		useExtendedFunctionality(spiderDataGroup, extendedFunctionalityList);
+		useExtendedFunctionality(dataGroup, extendedFunctionalityList);
 	}
 
 	private void ensureCompleteRecordInfo(String userId, String recordType) {
 		ensureIdExists(recordType);
-		DataGroup recordInfo = recordAsSpiderDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+		DataGroup recordInfo = recordAsDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		addTypeToRecordInfo(recordType, recordInfo);
 		addCreatedInfoToRecordInfoUsingUserId(recordInfo, userId);
 		addUpdatedInfoToRecordInfoUsingUserId(recordInfo, userId);
@@ -206,7 +205,7 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 	}
 
 	private void removeIdIfPresentInData() {
-		DataGroup recordInfo = recordAsSpiderDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+		DataGroup recordInfo = recordAsDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		if (recordInfo.containsChildWithNameInData("id")) {
 			recordInfo.removeChild("id");
 		}
@@ -225,7 +224,7 @@ public final class SpiderRecordCreatorImp extends SpiderRecordHandler
 	}
 
 	private void generateAndAddIdToRecordInfo(String recordType) {
-		DataGroup recordInfo = recordAsSpiderDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
+		DataGroup recordInfo = recordAsDataGroup.getFirstGroupWithNameInData(RECORD_INFO);
 		recordInfo.addChild(
 				DataAtomic.withNameInDataAndValue("id", idGenerator.getIdForType(recordType)));
 	}

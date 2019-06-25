@@ -37,6 +37,7 @@ import se.uu.ub.cora.bookkeeper.termcollector.DataGroupTermCollector;
 import se.uu.ub.cora.bookkeeper.validator.DataValidator;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecord;
+import se.uu.ub.cora.logger.LoggerProvider;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
@@ -55,6 +56,7 @@ import se.uu.ub.cora.spider.dependency.SpiderInstanceFactorySpy2;
 import se.uu.ub.cora.spider.dependency.SpiderInstanceProvider;
 import se.uu.ub.cora.spider.dependency.StreamStorageProviderSpy;
 import se.uu.ub.cora.spider.extended.ExtendedFunctionalityProviderSpy;
+import se.uu.ub.cora.spider.log.LoggerFactorySpy;
 import se.uu.ub.cora.spider.record.storage.RecordNotFoundException;
 import se.uu.ub.cora.spider.record.storage.TimeStampIdGenerator;
 import se.uu.ub.cora.spider.search.RecordIndexer;
@@ -87,9 +89,13 @@ public class SpiderUploaderTest {
 	private SpiderDependencyProviderSpy dependencyProvider;
 	private ExtendedFunctionalityProviderSpy extendedFunctionalityProvider;
 	private SpiderInstanceFactory factory;
+	private LoggerFactorySpy loggerFactorySpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
+		loggerFactorySpy = new LoggerFactorySpy();
+		LoggerProvider.setLoggerFactory(loggerFactorySpy);
+
 		authenticator = new AuthenticatorSpy();
 		authorizator = new AuthorizatorAlwaysAuthorizedSpy();
 		dataValidator = new DataValidatorAlwaysValidSpy();
@@ -140,8 +146,8 @@ public class SpiderUploaderTest {
 		keyCalculator = new RuleCalculatorSpy();
 		setUpDependencyProvider();
 
-		DataGroup spiderDataGroup = DataGroup.withNameInData("nameInData");
-		spiderDataGroup.addChild(
+		DataGroup dataGroup = DataGroup.withNameInData("nameInData");
+		dataGroup.addChild(
 				SpiderDataCreator.createRecordInfoWithRecordTypeAndRecordIdAndDataDivider("spyType",
 						"spyId", "cora"));
 		InputStream stream = new ByteArrayInputStream("a string".getBytes(StandardCharsets.UTF_8));

@@ -46,7 +46,7 @@ public final class SpiderRecordSearcherImp implements SpiderRecordSearcher {
 	private RecordStorage recordStorage;
 	private DataGroup searchData;
 	private RecordSearch recordSearch;
-	private DataList spiderDataList;
+	private DataList dataList;
 	private DataGroup searchMetadata;
 	private List<DataGroup> recordTypeToSearchInGroups;
 	private DataGroupTermCollector collectTermCollector;
@@ -149,20 +149,20 @@ public final class SpiderRecordSearcherImp implements SpiderRecordSearcher {
 	}
 
 	private DataList filterAndEnhanceSearchResult(SpiderReadResult spiderSearchResult) {
-		spiderDataList = DataList.withContainDataOfType("mix");
+		dataList = DataList.withContainDataOfType("mix");
 		Collection<DataGroup> dataGroupList = spiderSearchResult.listOfDataGroups;
 		dataGroupList.forEach(this::filterEnhanceAndAddToList);
 
-		spiderDataList.setFromNo(String.valueOf(startRow));
-		spiderDataList.setToNo(String.valueOf(startRow - 1 + spiderDataList.getDataList().size()));
-		spiderDataList.setTotalNo(String.valueOf(spiderSearchResult.totalNumberOfMatches));
-		return spiderDataList;
+		dataList.setFromNo(String.valueOf(startRow));
+		dataList.setToNo(String.valueOf(startRow - 1 + dataList.getDataList().size()));
+		dataList.setTotalNo(String.valueOf(spiderSearchResult.totalNumberOfMatches));
+		return dataList;
 	}
 
 	private void filterEnhanceAndAddToList(DataGroup dataGroup) {
 		String recordType = extractRecordTypeFromRecordInfo(dataGroup);
 		if (isUserAuthorisedToReadData(recordType, dataGroup)) {
-			spiderDataList.addData(dataGroupToRecordEnhancer.enhance(user, recordType, dataGroup));
+			dataList.addData(dataGroupToRecordEnhancer.enhance(user, recordType, dataGroup));
 		}
 	}
 

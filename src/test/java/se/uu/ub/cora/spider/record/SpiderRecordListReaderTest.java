@@ -39,6 +39,7 @@ import se.uu.ub.cora.data.DataAtomic;
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataList;
 import se.uu.ub.cora.data.DataRecord;
+import se.uu.ub.cora.logger.LoggerProvider;
 import se.uu.ub.cora.spider.authentication.AuthenticationException;
 import se.uu.ub.cora.spider.authentication.Authenticator;
 import se.uu.ub.cora.spider.authentication.AuthenticatorSpy;
@@ -49,6 +50,7 @@ import se.uu.ub.cora.spider.authorization.PermissionRuleCalculator;
 import se.uu.ub.cora.spider.authorization.SpiderAuthorizator;
 import se.uu.ub.cora.spider.dependency.RecordStorageProviderSpy;
 import se.uu.ub.cora.spider.dependency.SpiderDependencyProviderSpy;
+import se.uu.ub.cora.spider.log.LoggerFactorySpy;
 import se.uu.ub.cora.spider.spy.AuthorizatorAlwaysAuthorizedSpy;
 import se.uu.ub.cora.spider.spy.DataValidatorAlwaysInvalidSpy;
 import se.uu.ub.cora.spider.spy.DataValidatorAlwaysValidSpy;
@@ -69,12 +71,16 @@ public class SpiderRecordListReaderTest {
 	private DataValidator dataValidator;
 	private DataGroup emptyFilter;
 	private DataGroup exampleFilter;
+	private LoggerFactorySpy loggerFactorySpy;
 
 	private static final String SOME_USER_TOKEN = "someToken78678567";
 	private static final String SOME_RECORD_TYPE = "place";
 
 	@BeforeMethod
 	public void beforeMethod() {
+		loggerFactorySpy = new LoggerFactorySpy();
+		LoggerProvider.setLoggerFactory(loggerFactorySpy);
+
 		emptyFilter = DataGroup.withNameInData("filter");
 		exampleFilter = DataGroup.withNameInData("filter");
 		authenticator = new AuthenticatorSpy();
@@ -180,8 +186,8 @@ public class SpiderRecordListReaderTest {
 		assertEquals(readRecordList.getFromNo(), "1");
 		assertEquals(readRecordList.getToNo(), "5");
 		List<Data> records = readRecordList.getDataList();
-		DataRecord spiderDataRecord = (DataRecord) records.iterator().next();
-		assertNotNull(spiderDataRecord);
+		DataRecord dataRecord = (DataRecord) records.iterator().next();
+		assertNotNull(dataRecord);
 	}
 
 	@Test
@@ -350,13 +356,13 @@ public class SpiderRecordListReaderTest {
 	public void testReadListAbstractRecordType() {
 		recordStorage = new RecordStorageSpy();
 		setUpDependencyProvider();
-		DataList spiderDataList = recordListReader.readRecordList(SOME_USER_TOKEN, "abstract",
+		DataList dataList = recordListReader.readRecordList(SOME_USER_TOKEN, "abstract",
 				emptyFilter);
-		assertEquals(spiderDataList.getTotalNumberOfTypeInStorage(), "199");
+		assertEquals(dataList.getTotalNumberOfTypeInStorage(), "199");
 
-		String type1 = extractTypeFromChildInListUsingIndex(spiderDataList, 0);
+		String type1 = extractTypeFromChildInListUsingIndex(dataList, 0);
 		assertEquals(type1, "implementing1");
-		String type2 = extractTypeFromChildInListUsingIndex(spiderDataList, 1);
+		String type2 = extractTypeFromChildInListUsingIndex(dataList, 1);
 		assertEquals(type2, "implementing2");
 	}
 
@@ -371,10 +377,10 @@ public class SpiderRecordListReaderTest {
 				.getFirstAtomicValueWithNameInData("id"), "child2_2");
 	}
 
-	private String extractTypeFromChildInListUsingIndex(DataList spiderDataList, int index) {
-		DataRecord spiderData1 = (DataRecord) spiderDataList.getDataList().get(index);
-		DataGroup spiderDataGroup1 = spiderData1.getDataGroup();
-		DataGroup recordInfo = spiderDataGroup1.getFirstGroupWithNameInData("recordInfo");
+	private String extractTypeFromChildInListUsingIndex(DataList dataList, int index) {
+		DataRecord dataRecord = (DataRecord) dataList.getDataList().get(index);
+		DataGroup dataGroup = dataRecord.getDataGroup();
+		DataGroup recordInfo = dataGroup.getFirstGroupWithNameInData("recordInfo");
 		DataGroup typeGroup = recordInfo.getFirstGroupWithNameInData("type");
 		return typeGroup.getFirstAtomicValueWithNameInData("linkedRecordId");
 	}
@@ -384,11 +390,11 @@ public class SpiderRecordListReaderTest {
 		recordStorage = new RecordStorageSpy();
 		setUpDependencyProvider();
 
-		DataList spiderDataList = recordListReader.readRecordList(SOME_USER_TOKEN, "abstract2",
+		DataList dataList = recordListReader.readRecordList(SOME_USER_TOKEN, "abstract2",
 				emptyFilter);
-		assertEquals(spiderDataList.getTotalNumberOfTypeInStorage(), "199");
+		assertEquals(dataList.getTotalNumberOfTypeInStorage(), "199");
 
-		String type1 = extractTypeFromChildInListUsingIndex(spiderDataList, 0);
+		String type1 = extractTypeFromChildInListUsingIndex(dataList, 0);
 		assertEquals(type1, "implementing2");
 
 	}

@@ -59,7 +59,7 @@ public class SpiderRecordSearcherTest {
 	private static final String A_SEARCH_ID = "aSearchId";
 	private static final String ANOTHER_SEARCH_ID = "anotherSearchId";
 	private static final String SOME_AUTH_TOKEN = "someToken78678567";
-	private final DataGroup someSearchData = DataGroup.withNameInData("search");
+	private DataGroup someSearchData;
 
 	private RecordStorage recordStorage;
 	private Authenticator authenticator;
@@ -85,6 +85,7 @@ public class SpiderRecordSearcherTest {
 		recordSearch = new RecordSearchSpy();
 		termCollector = new DataGroupTermCollectorSpy();
 		setUpDependencyProvider();
+		someSearchData = DataGroup.withNameInData("search");
 	}
 
 	private void setUpDependencyProvider() {
@@ -127,6 +128,15 @@ public class SpiderRecordSearcherTest {
 		DataList searchResult = recordSearcher.search(SOME_AUTH_TOKEN, A_SEARCH_ID, someSearchData);
 
 		assertEquals(searchResult.getFromNo(), "2");
+	}
+
+	@Test
+	public void testStartRowNotAnInt() {
+		someSearchData.addChild(DataAtomic.withNameInDataAndValue("start", "notAnInt"));
+
+		DataList searchResult = recordSearcher.search(SOME_AUTH_TOKEN, A_SEARCH_ID, someSearchData);
+
+		assertEquals(searchResult.getFromNo(), "1");
 	}
 
 	@Test
